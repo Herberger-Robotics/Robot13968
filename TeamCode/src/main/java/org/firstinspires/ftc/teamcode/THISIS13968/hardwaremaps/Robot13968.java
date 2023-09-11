@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor101;
-import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain101;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain101;
 
 import java.util.List;
 
@@ -19,9 +19,10 @@ public class Robot13968 {
         private static Robot13968 single_instance = null; //declares an instance of the robot
 
         HardwareMap hwMap = null; //declare hardware map
-        private ElapsedTime period = new ElapsedTime(); //new  time tracking variable
+        private ElapsedTime period = new ElapsedTime(); //new  time tracking variable, for auto
 
         public BNO055IMU imu; //declare imu
+        //public Camera camera = null;
 
         //drivetrain
         public CoolMotor101 rightFront = null;
@@ -29,15 +30,9 @@ public class Robot13968 {
         public CoolMotor101 rightBack = null;
         public CoolMotor101 leftBack = null;
 
-
-
-        //public Camera camera = null;
-
-
         public DriveTrain101 driveTrain = null;
 
-        private static RunType lastRan = RunType.MANUAL;
-
+    private static RunType lastRan = RunType.MANUAL;
     // function to set run type
         public static RunType setLastRan(RunType toSet) {
             lastRan = toSet;
@@ -78,7 +73,13 @@ public class Robot13968 {
                 single_instance = new Robot13968();
                 return single_instance;
         }
+    public void clearBulkCache() {
+        List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
 
+        for(LynxModule module : allHubs) {
+            module.clearBulkCache();
+        }
+    }
         public void init(HardwareMap ahwMap, DriveTrain101.DriveMode driveMode,boolean initIMU)
         {
 
@@ -90,7 +91,7 @@ public class Robot13968 {
             hwMap = ahwMap;
             //camera = new Camera(hwMap);
             driveTrain = new DriveTrain101(hwMap, driveMode); //init drive train
-
+                //????
             List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
 
             for(LynxModule module : allHubs) {
@@ -105,33 +106,4 @@ public class Robot13968 {
                 imu.initialize(parameters);
             }
         }
-/*
-        public void initDumb(HardwareMap ahwMap, DriveTrain.DriveMode driveMode, boolean initIMU) {
-
-            CommandScheduler.getInstance().reset();
-            hwMap = ahwMap;
-            driveTrain = new DriveTrain(hwMap, driveMode);
-            liftArm = new LiftArm(hwMap);
-
-            List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
-
-            for(LynxModule module : allHubs) {
-                module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-            }
-            if(initIMU) {
-                imu = hwMap.get(BNO055IMU.class, "imu");
-                BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-                parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-                imu.initialize(parameters);
-            }
-        }
-
-        public void clearBulkCache() {
-            List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
-
-            for(LynxModule module : allHubs) {
-                module.clearBulkCache();
-            }
-        }
-*/
 }

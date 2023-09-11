@@ -36,8 +36,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
-import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain101;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain101;
 
 @TeleOp(name="13968Drive", group="Iterative Opmode")
 
@@ -99,9 +100,9 @@ public class Drive13968 extends OpMode
      */
     @Override
     public void start() {
-
         runtime.reset(); //resets time elapsed to 0
 
+        robot.imu.startAccelerationIntegration(null, null , 100 );
        // if (robot.driveTrain.getDriveMode() == DriveTrain101.DriveMode.MANUAL)
 
 
@@ -121,8 +122,7 @@ public class Drive13968 extends OpMode
 
         //telemetry sends info to driver station phone, just for testing purposes
         telemetry.addData("Speed", robot.driveTrain.getSpeed());
-        telemetry.addData("movement", driverOp.getLeftX());
-        telemetry.addData("Status", robot.driveTrain.getDriveMode());
+        //telemetry.addData("Status", robot.driveTrain.getDriveMode());
 
 
 
@@ -146,11 +146,11 @@ public class Drive13968 extends OpMode
 
         if (isB) {
             //if B is clicked, close claw
-            telemetry.addData("close",true);
+            telemetry.addData("B",true);
         }
         if (isA) {
             //if A is clicked, open claw
-            telemetry.addData("close",false);
+            telemetry.addData("A",false);
         }
 
         /*
@@ -158,38 +158,13 @@ public class Drive13968 extends OpMode
         the slower the speed is
         */
 
-        if(rightTrigger > 0.9) {
-            robot.driveTrain.setSpeed(0.2);
-            driveMode = DriveModes.SLOW;
-        }
-        else if(rightTrigger>0.75) {
-            robot.driveTrain.setSpeed(0.3);
-
-        }
-        else if(rightTrigger>0.6) {
-            robot.driveTrain.setSpeed(0.4);
-
-        }
-        else if(rightTrigger>0.45) {
-            robot.driveTrain.setSpeed(0.5);
-
-        }
-        else if(rightTrigger>0.3) {
-            robot.driveTrain.setSpeed(0.6);
-
-        }
-        else if(rightTrigger>0.15) {
-            robot.driveTrain.setSpeed(0.7);
-
-        }
-        else{
-            robot.driveTrain.setSpeed(0.8);
-            driveMode = DriveModes.FAST;
-        }
-
-
-
-
+        if(rightTrigger > 0.9) {robot.driveTrain.setSpeed(0.2);}
+        else if(rightTrigger>0.75) {robot.driveTrain.setSpeed(0.3);}
+        else if(rightTrigger>0.6) {robot.driveTrain.setSpeed(0.4);}
+        else if(rightTrigger>0.45) {robot.driveTrain.setSpeed(0.5);}
+        else if(rightTrigger>0.3) {robot.driveTrain.setSpeed(0.6);}
+        else if(rightTrigger>0.15) {robot.driveTrain.setSpeed(0.7);}
+        else{robot.driveTrain.setSpeed(0.8);}
 
 
         double speed = robot.driveTrain.getSpeed(); //gets speed fromm drivetrain
@@ -202,26 +177,25 @@ public class Drive13968 extends OpMode
 
         if (Math.abs(driverOp.getLeftX()) > 0.2) {  // makes strafing less sensitive  to accidental movements on triggers
             strafe = driverOp.getLeftX() * (-1) * speed; //sets strafe  to left joystick (driver gamepad) horizontal amt
+        }
+        else {strafe = 0;}
 
-        }
-        else {
-            strafe = 0;
-        }
+
         robot.driveTrain.setManualDrive( strafe,  forward,  turn); //uses drivetrain funct (has a drive robot centric funct)
 
         telemetry.addData("Strafe",strafe );
         telemetry.addData("Forward", forward );
         telemetry.addData("Turn",turn );
+
+        telemetry.addData("Drive Mode", robot.driveTrain.getDriveMode());
         telemetry.addData("Manual Drive", robot.driveTrain.manualForward);
         telemetry.addData("Forward Calculation", robot.driveTrain.getForwardCalculation());
 
+        telemetry.addData("Robot Position", robot.imu.getPosition());
 
-
-
+        telemetry.addData("Robot Position", robot.imu.getAngularOrientation());
 
     }
-
-
     /*
      * Code to run ONCE after the driver hits STOP
      */
@@ -230,7 +204,7 @@ public class Drive13968 extends OpMode
 
         //resets vals to 0, initial position
         Robot13968 robot = Robot13968.getInstance();
-
+        robot.imu.stopAccelerationIntegration();
         robot.rightBack.set(0);
         robot.leftBack.set(0);
         robot.rightFront.set(0);

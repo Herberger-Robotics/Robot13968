@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.THISIS13968.subsystems;
+package org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor101;
 
@@ -25,9 +26,9 @@ import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor1
 public class DriveTrain101 extends SubsystemBase {
     @Config
     public static class DriveTrainConstants {
-        public static PIDCoefficients FORWARD_PID = new PIDCoefficients(0.00075,0,0);
+        public static PIDCoefficients FORWARD_PID = new PIDCoefficients(0.00075,0,0); // trains forward movement
         public static double FORWARD_kStatic = 0.1;
-        public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.0025,0,0);
+        public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.0025,0,0); //trains angle movement: turning
         public static double HEADING_kStatic = 0.0125;
     }
 
@@ -50,6 +51,7 @@ public class DriveTrain101 extends SubsystemBase {
                 AUTOIDLE,
             AUTOFORWARD,
             AUTOTURN,
+            AUTODIAGONAL
          }
 
     private double speed = 0.6;
@@ -65,19 +67,20 @@ public class DriveTrain101 extends SubsystemBase {
     public double manualForward = 0;
     private double manualTurn = 0;
     private double manualStrafe = 0;
-    private double manualArm = 0;//need update function for this
 
 
     double forwardCalculation;
     double turnCalculation;
     double strafeCalculation;
 
-    double armY;
+
     public PIDFController forwardPID;
     public PIDFController headingPID;
     double targetAngle = 0;
     double targetX = 0;
     Orientation angles;
+    Position position;
+
 
     public DriveTrain101(final HardwareMap hwMap, DriveMode driveMode) {
         Robot13968 robot = Robot13968.getInstance();
@@ -109,35 +112,36 @@ public class DriveTrain101 extends SubsystemBase {
         manualTurn = turn;
         manualStrafe = strafe;
     }
+
     public void update() {
+
 
         Robot13968 robot = Robot13968.getInstance();
 
         angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        position = robot.imu.getPosition();
         switch (driveMode) {
             case MANUAL:
                 forwardCalculation = manualForward;
                 turnCalculation = manualTurn;
                 strafeCalculation = manualStrafe;
-                armY = manualArm;
                 break;
             case AUTOFORWARD:
                 forwardCalculation = forwardPID.update(robot.leftFront.getEncoderCount());
                 turnCalculation = 0;
                 strafeCalculation = 0;
-                armY = 0;
                 break;
+            case AUTODIAGONAL:
             case AUTOTURN:
                 forwardCalculation = 0;
                 turnCalculation = headingPID.update(currentHeading());
                 strafeCalculation = 0;
-                armY = 0;
                 break;
-            /*default:
+            default:
                 forwardCalculation = 0;
                 turnCalculation = 0;
                 strafeCalculation = 0;
-                break;*/
+                break;
         }
         //
         driveTrain.driveRobotCentric(strafeCalculation, forwardCalculation, turnCalculation);
