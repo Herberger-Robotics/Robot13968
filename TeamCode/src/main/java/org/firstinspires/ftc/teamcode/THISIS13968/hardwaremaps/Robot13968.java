@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,7 +22,7 @@ public class Robot13968 {
         HardwareMap hwMap = null; //declare hardware map
         private ElapsedTime period = new ElapsedTime(); //new  time tracking variable, for auto
 
-        public BNO055IMU imu; //declare imu
+        //public BNO055IMU imu; //declare imu
         //public Camera camera = null;
 
         //drivetrain
@@ -100,10 +101,10 @@ public class Robot13968 {
 
             if(initIMU) {
                 //initializes imu if it exists
-                imu = hwMap.get(BNO055IMU.class, "imu");
-                BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-                parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES; //gets params of imu from class function
-                imu.initialize(parameters);
+               // imu = hwMap.get(BHI260IMU.class, "imu");
+                //BNO055IMU.Parameters parameters = new BHI260IMU.Parameters();
+                //parameters.angleUnit = BHI260IMU.AngleUnit.DEGREES; //gets params of imu from class function
+                //imu.initialize(parameters);
             }
         }
 }

@@ -36,13 +36,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain101;
 
-@TeleOp(name="13968Drive", group="Iterative Opmode")
+@TeleOp(name="thisisdrivebro", group="Iterative Opmode")
 
-public class Drive13968 extends OpMode
+public class thisisdrivebro extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -77,14 +76,14 @@ public class Drive13968 extends OpMode
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
 
-        robot.init(hardwareMap, DriveTrain101.DriveMode.MANUAL, true); //initializes robot for manual driving with imu
+        robot.init(hardwareMap, DriveTrain101.DriveMode.MANUAL, false); //initializes robot for manual driving with imu
 
         //Gamepad Initialization
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
 
         // Tell the driver that initialization is complete.
-        telemetry.addData("Calibration Status", robot.imu.getSystemStatus());
+        //telemetry.addData("Calibration Status", robot.imu.getSystemStatus());
         telemetry.addData("Status", "Initialized");
     }
 
@@ -102,7 +101,7 @@ public class Drive13968 extends OpMode
     public void start() {
         runtime.reset(); //resets time elapsed to 0
 
-        robot.imu.startAccelerationIntegration(null, null , 100 );
+        //robot.imu.startAccelerationIntegration(null, null , 100 );
        // if (robot.driveTrain.getDriveMode() == DriveTrain101.DriveMode.MANUAL)
 
 
@@ -191,9 +190,9 @@ public class Drive13968 extends OpMode
         telemetry.addData("Manual Drive", robot.driveTrain.manualForward);
         telemetry.addData("Forward Calculation", robot.driveTrain.getForwardCalculation());
 
-        telemetry.addData("Robot Position", robot.imu.getPosition());
+        //telemetry.addData("Robot Position", robot.imu.getPosition());
 
-        telemetry.addData("Robot Position", robot.imu.getAngularOrientation());
+      //  telemetry.addData("Robot Position", robot.imu.getAngularOrientation());
 
     }
     /*
@@ -204,7 +203,7 @@ public class Drive13968 extends OpMode
 
         //resets vals to 0, initial position
         Robot13968 robot = Robot13968.getInstance();
-        robot.imu.stopAccelerationIntegration();
+       // robot.imu.stopAccelerationIntegration();
         robot.rightBack.set(0);
         robot.leftBack.set(0);
         robot.rightFront.set(0);

@@ -94,10 +94,10 @@ public class DriveTrain101 extends SubsystemBase {
         robot.rightBack = new CoolMotor101(hwMap, "rightBack", 134.4);
         robot.leftBack = new CoolMotor101(hwMap, "leftBack", 134.4);
         robot.leftFront = new CoolMotor101(hwMap, "leftFront", 134.4);
-        robot.leftBack.setInverted(true);
-        robot.leftFront.setInverted(true);
-        robot.rightBack.setInverted(true);
-        robot.rightFront.setInverted(true);
+        //robot.leftBack.setInverted(true);
+       // robot.leftFront.setInverted(true);
+        //robot.rightBack.setInverted(true);
+        //robot.rightFront.setInverted(true);
         //leftMotors = new MotorGroup(robot.rightFront, robot.rightBack);
         //rightMotors = new MotorGroup(robot.leftBack, robot.leftFront);
 
@@ -110,7 +110,7 @@ public class DriveTrain101 extends SubsystemBase {
         //manually driving,specifiying amt of strafing, forward, and turn, used in manual teleop to set vals
         manualForward = forward;
         manualTurn = turn;
-        manualStrafe = strafe;
+        manualStrafe = -strafe;
     }
 
     public void update() {
@@ -118,8 +118,8 @@ public class DriveTrain101 extends SubsystemBase {
 
         Robot13968 robot = Robot13968.getInstance();
 
-        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        position = robot.imu.getPosition();
+        //angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        //position = robot.imu.getPosition();
         switch (driveMode) {
             case MANUAL:
                 forwardCalculation = manualForward;
@@ -193,7 +193,7 @@ public class DriveTrain101 extends SubsystemBase {
 
         double currentHeading;
 
-        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+       // angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         //if(angles.firstAngle <= 0) currentHeading = 360 - Math.abs(angles.firstAngle);
         currentHeading = -angles.firstAngle;
