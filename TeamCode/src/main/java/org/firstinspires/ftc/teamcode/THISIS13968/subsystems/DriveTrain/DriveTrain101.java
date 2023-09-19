@@ -90,10 +90,10 @@ public class DriveTrain101 extends SubsystemBase {
         forwardPID = new PIDFController(DriveTrainConstants.FORWARD_PID, 0, 0, DriveTrainConstants.FORWARD_kStatic);
         headingPID = new PIDFController(DriveTrainConstants.HEADING_PID, 0, 0, DriveTrainConstants.HEADING_kStatic);
 
-        robot.rightFront = new CoolMotor101(hwMap, "rightFront", 134.4);
-        robot.rightBack = new CoolMotor101(hwMap, "rightBack", 134.4);
-        robot.leftBack = new CoolMotor101(hwMap, "leftBack", 134.4);
-        robot.leftFront = new CoolMotor101(hwMap, "leftFront", 134.4);
+        robot.rightFront = new CoolMotor101(hwMap, "rightFront", 537.7);
+        robot.rightBack = new CoolMotor101(hwMap, "rightBack", 537.7);
+        robot.leftBack = new CoolMotor101(hwMap, "leftBack", 537.7);
+        robot.leftFront = new CoolMotor101(hwMap, "leftFront", 537.7);
         //robot.leftBack.setInverted(true);
        // robot.leftFront.setInverted(true);
         //robot.rightBack.setInverted(true);
