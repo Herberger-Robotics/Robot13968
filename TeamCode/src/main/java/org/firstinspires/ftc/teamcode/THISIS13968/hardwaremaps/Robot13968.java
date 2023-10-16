@@ -7,6 +7,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.THISIS13968.Camera.Camera;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor101;
 import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain101;
 
@@ -31,6 +32,7 @@ public class Robot13968 {
         public CoolMotor101 rightBack = null;
         public CoolMotor101 leftBack = null;
 
+        public Camera camera = null;
         public DriveTrain101 driveTrain = null;
 
     private static RunType lastRan = RunType.MANUAL;

@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.Camera;
-/*
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
@@ -7,14 +7,14 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-//
-//import org.firstinspires.ftc.teamcode.THISIS10111.hardwaremaps.Robot10111;
-////import org.firstinspires.ftc.teamcode.hardwaremaps.Robot;
-//import org.openftc.easyopencv.OpenCvCamera;
-//import org.openftc.easyopencv.OpenCvCameraFactory;
-//import org.openftc.easyopencv.OpenCvCameraRotation;
-//import org.openftc.easyopencv.OpenCvInternalCamera;
-//
+
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+
 public class Camera {
     public OpenCvInternalCamera phoneCam;
     public TSEDetectorPipeline pipeline;
@@ -56,4 +56,4 @@ public class Camera {
     }
 
 
-}*/
+}
