@@ -9,17 +9,17 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @TeleOp
-public class CameraTest extends LinearOpMode {
+public class CameraTestRed extends LinearOpMode {
 
     OpenCvInternalCamera phoneCam;
-    TSEDetectorPipeline pipeline;
+    TSEDetectorPipeline2 pipeline;
 
     @Override
     public void runOpMode() {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new TSEDetectorPipeline();
+        pipeline = new TSEDetectorPipeline2();
         phoneCam.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
