@@ -13,7 +13,8 @@ import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
+
+
 
 public class Camera {
     public OpenCvInternalCamera phoneCam;
@@ -31,7 +32,6 @@ public class Camera {
 //        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
 //        // out when the RC activity is in portrait. We do our actual image processing assuming
 //        // landscape orientation, though.
-        phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
         phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
        {
             @Override
