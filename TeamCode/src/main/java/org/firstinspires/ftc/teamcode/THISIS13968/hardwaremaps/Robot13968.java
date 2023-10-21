@@ -1,55 +1,43 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.qualcomm.hardware.bosch.BHI260IMU;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.Camera;
-import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor101;
-import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain101;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain90;
+import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants;
 
 import java.util.List;
 
-public class Robot13968 {
+
+
+    public class Robot13968 {
 
         // Static variable reference of single_instance
         // of type Singleton
-    //
-        private static Robot13968 single_instance = null; //declares an instance of the robot
+        //
+        private static org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968 single_instance = null; //declares an instance of the robot
 
         HardwareMap hwMap = null; //declare hardware map
         private ElapsedTime period = new ElapsedTime(); //new  time tracking variable, for auto
 
-        //public BNO055IMU imu; //declare imu
+        public IMU imu; //declare imu
         //public Camera camera = null;
 
         //drivetrain
-        public CoolMotor101 rightFront = null;
-        public CoolMotor101 leftFront = null;
-        public CoolMotor101 rightBack = null;
-        public CoolMotor101 leftBack = null;
+        public DcMotorEx rightFront = null;
+        public DcMotorEx leftFront = null;
+        public DcMotorEx rightBack = null;
+        public DcMotorEx leftBack = null;
 
         public Camera camera = null;
-        public DriveTrain101 driveTrain = null;
+        public DriveTrain90 driveTrain = null;
 
-    private static RunType lastRan = RunType.MANUAL;
-    // function to set run type
-        public static RunType setLastRan(RunType toSet) {
-            lastRan = toSet;
-            return lastRan;
-        }
-        public static RunType getLastRan() {
-            return lastRan;
-        } //returns the run type
-
-        //possiblities for run type
-    public enum RunType {
-            AUTONOMOUS,
-            MANUAL
-        }
 
 
 
@@ -83,7 +71,7 @@ public class Robot13968 {
             module.clearBulkCache();
         }
     }
-        public void init(HardwareMap ahwMap, DriveTrain101.DriveMode driveMode,boolean initIMU)
+        public void init(HardwareMap ahwMap,boolean initIMU)
         {
 
             /*
@@ -93,7 +81,7 @@ public class Robot13968 {
         CommandScheduler.getInstance().reset(); //reset command scheduler
             hwMap = ahwMap;
             //camera = new Camera(hwMap);
-            driveTrain = new DriveTrain101(hwMap, driveMode); //init drive train
+            driveTrain = new DriveTrain90(hwMap); //init drive train
                 //????
             List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
 
@@ -102,11 +90,10 @@ public class Robot13968 {
             }
 
             if(initIMU) {
-                //initializes imu if it exists
-               // imu = hwMap.get(BHI260IMU.class, "imu");
-                //BNO055IMU.Parameters parameters = new BHI260IMU.Parameters();
-                //parameters.angleUnit = BHI260IMU.AngleUnit.DEGREES; //gets params of imu from class function
-                //imu.initialize(parameters);
+                imu = hwMap.get(IMU.class, "imu");
+                IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                        DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+                imu.initialize(parameters);
             }
         }
 }

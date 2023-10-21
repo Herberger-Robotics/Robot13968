@@ -1,21 +1,63 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain;
+/*
+import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.kV;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
+
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor101;
+
+
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.drive.DriveSignal;
+import com.acmerobotics.roadrunner.drive.MecanumDrive;
+import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
+import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 
 ///finished editing in from prev yr
@@ -23,14 +65,20 @@ import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor1
 
 //import org.firstinspires.ftc.teamcode.hardwaremaps.Robot;
 
-public class DriveTrain101 extends SubsystemBase {
+public class DriveTrain101 extends MecanumDrive {
     @Config
-    public static class DriveTrainConstants {
-        public static PIDCoefficients FORWARD_PID = new PIDCoefficients(0.00075,0,0); // trains forward movement
-        public static double FORWARD_kStatic = 0.1;
-        public static PIDCoefficients HEADING_PID = new PIDCoefficients(0.0025,0,0); //trains angle movement: turning
-        public static double HEADING_kStatic = 0.0125;
+    public static class DriveTrain101Constants {
+        public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
+        public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+        public static double LATERAL_MULTIPLIER = 1.055;
+
+        public static double VX_WEIGHT = 1;
+        public static double VY_WEIGHT = 1;
+        public static double OMEGA_WEIGHT = 1;
+
     }
+
+
 
         //also related to the motor groups, not necessary w Mecanum drive
     //private MotorGroup leftMotors;
@@ -83,12 +131,12 @@ public class DriveTrain101 extends SubsystemBase {
 
 
     public DriveTrain101(final HardwareMap hwMap, DriveMode driveMode) {
-        Robot13968 robot = Robot13968.getInstance();
-        CommandScheduler.getInstance().registerSubsystem(DriveTrain101.this);
+        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, DriveTrain101Constants.LATERAL_MULTIPLIER);
 
+        Robot13968 robot = Robot13968.getInstance();
         this.driveMode = driveMode;
-        forwardPID = new PIDFController(DriveTrainConstants.FORWARD_PID, 0, 0, DriveTrainConstants.FORWARD_kStatic);
-        headingPID = new PIDFController(DriveTrainConstants.HEADING_PID, 0, 0, DriveTrainConstants.HEADING_kStatic);
+        forwardPID = new PIDFController(DriveTrain101Constants.FORWARD_PID, 0, 0, DriveTrain101Constants.FORWARD_kStatic);
+        headingPID = new PIDFController(DriveTrain101Constants.HEADING_PID, 0, 0, DriveTrain101Constants.HEADING_kStatic);
 
         robot.rightFront = new CoolMotor101(hwMap, "rightFront", 537.7);
         robot.rightBack = new CoolMotor101(hwMap, "rightBack", 537.7);
@@ -248,4 +296,4 @@ public class DriveTrain101 extends SubsystemBase {
         return isBusy;
     }
 
-}
+}*/

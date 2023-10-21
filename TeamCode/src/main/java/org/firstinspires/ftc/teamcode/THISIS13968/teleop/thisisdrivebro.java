@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -37,7 +38,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
-import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain101;
 
 @TeleOp(name="thisisdrivebro", group="Iterative Opmode")
 
@@ -59,12 +59,7 @@ public class thisisdrivebro extends OpMode
 
 
     //self explanatory
-    public enum DriveModes {
-        SLOW,
-        FAST,
-    }
 
-    public DriveModes driveMode = DriveModes.FAST; //initializes driving to fast speed
 
     double armup = 0; //initializes amount the arm goes up manually to 0
 
@@ -76,7 +71,7 @@ public class thisisdrivebro extends OpMode
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
 
-        robot.init(hardwareMap, DriveTrain101.DriveMode.MANUAL, false); //initializes robot for manual driving with imu
+        robot.init(hardwareMap, true); //initializes robot for manual driving with imu
 
         //Gamepad Initialization
         driverOp = new GamepadEx(gamepad1);
@@ -120,7 +115,7 @@ public class thisisdrivebro extends OpMode
         driveTrainController(); //just the driving function below
 
         //telemetry sends info to driver station phone, just for testing purposes
-        telemetry.addData("Speed", robot.driveTrain.getSpeed());
+        telemetry.addData("Speed", robot.leftBack.getPower());
         //telemetry.addData("Status", robot.driveTrain.getDriveMode());
 
 
@@ -156,17 +151,17 @@ public class thisisdrivebro extends OpMode
         Sets a gradient slow down function for the bot's driving: the more right trigger is pressed,
         the slower the speed is
         */
+        double speed;
+        if(rightTrigger > 0.9) {speed=0.2;}
+        else if(rightTrigger>0.75) {speed=0.3;}
+        else if(rightTrigger>0.6) {speed=0.4;}
+        else if(rightTrigger>0.45) {speed=0.5;}
+        else if(rightTrigger>0.3) {speed=0.6;}
+        else if(rightTrigger>0.15) {speed=0.7;}
+        else{ speed=0.8;}
 
-        if(rightTrigger > 0.9) {robot.driveTrain.setSpeed(0.2);}
-        else if(rightTrigger>0.75) {robot.driveTrain.setSpeed(0.3);}
-        else if(rightTrigger>0.6) {robot.driveTrain.setSpeed(0.4);}
-        else if(rightTrigger>0.45) {robot.driveTrain.setSpeed(0.5);}
-        else if(rightTrigger>0.3) {robot.driveTrain.setSpeed(0.6);}
-        else if(rightTrigger>0.15) {robot.driveTrain.setSpeed(0.7);}
-        else{robot.driveTrain.setSpeed(0.8);}
 
 
-        double speed = robot.driveTrain.getSpeed(); //gets speed fromm drivetrain
 
         double strafe; //init strafe val
         double turn = driverOp.getRightX() * speed; // sets turn val to right joystick (driver gamepad) horizontal amt
@@ -179,16 +174,17 @@ public class thisisdrivebro extends OpMode
         }
         else {strafe = 0;}
 
-
-        robot.driveTrain.setManualDrive( strafe,  forward,  turn); //uses drivetrain funct (has a drive robot centric funct)
-
+        robot.driveTrain.setWeightedDrivePower(
+                new Pose2d(
+                        forward,
+                        strafe,
+                        -turn
+                )
+        );
         telemetry.addData("Strafe",strafe );
         telemetry.addData("Forward", forward );
         telemetry.addData("Turn",turn );
 
-        telemetry.addData("Drive Mode", robot.driveTrain.getDriveMode());
-        telemetry.addData("Manual Drive", robot.driveTrain.manualForward);
-        telemetry.addData("Forward Calculation", robot.driveTrain.getForwardCalculation());
 
         //telemetry.addData("Robot Position", robot.imu.getPosition());
 
@@ -204,10 +200,10 @@ public class thisisdrivebro extends OpMode
         //resets vals to 0, initial position
         Robot13968 robot = Robot13968.getInstance();
        // robot.imu.stopAccelerationIntegration();
-        robot.rightBack.set(0);
-        robot.leftBack.set(0);
-        robot.rightFront.set(0);
-        robot.leftFront.set(0);
+        robot.rightBack.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.leftFront.setPower(0);
     }
 
 
