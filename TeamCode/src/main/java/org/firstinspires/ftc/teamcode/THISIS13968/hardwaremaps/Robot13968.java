@@ -34,11 +34,23 @@ import java.util.List;
         public DcMotorEx leftFront = null;
         public DcMotorEx rightBack = null;
         public DcMotorEx leftBack = null;
-
-        public Camera camera = null;
         public DriveTrain90 driveTrain = null;
+        public Camera camera;
+        public DetectColor detectColor = DetectColor.BLUE; //default
+        public enum DetectColor {
+            BLUE,
+            RED
 
+        }
 
+        public void setDetectColor(DetectColor color){
+
+            detectColor = color;
+        }
+        public DetectColor getDetectColor(DetectColor color){
+
+            return detectColor;
+        }
 
 
     // Constructor
@@ -71,7 +83,7 @@ import java.util.List;
             module.clearBulkCache();
         }
     }
-        public void init(HardwareMap ahwMap,boolean initIMU)
+        public void init(HardwareMap ahwMap,boolean initIMU, boolean initCamera)
         {
 
             /*
@@ -94,6 +106,10 @@ import java.util.List;
                 IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                         DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
                 imu.initialize(parameters);
+            }
+            if(initCamera) {
+
+                  camera = new Camera(hwMap);
             }
         }
 }

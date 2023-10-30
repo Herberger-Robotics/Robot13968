@@ -29,6 +29,11 @@
 
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static java.lang.Thread.sleep;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -71,8 +76,11 @@ public class thisisdrivebro extends OpMode
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
 
-        robot.init(hardwareMap, true); //initializes robot for manual driving with imu
+        robot.init(hardwareMap, true,true); //initializes robot for manual driving with imu
 
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        robot.setDetectColor(Robot13968.DetectColor.BLUE);
         //Gamepad Initialization
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
@@ -95,7 +103,7 @@ public class thisisdrivebro extends OpMode
     @Override
     public void start() {
         runtime.reset(); //resets time elapsed to 0
-
+        FtcDashboard.getInstance().startCameraStream(robot.camera.controlHubCamera, 30);
         //robot.imu.startAccelerationIntegration(null, null , 100 );
        // if (robot.driveTrain.getDriveMode() == DriveTrain101.DriveMode.MANUAL)
 
@@ -117,6 +125,22 @@ public class thisisdrivebro extends OpMode
         //telemetry sends info to driver station phone, just for testing purposes
         telemetry.addData("Speed", robot.leftBack.getPower());
         //telemetry.addData("Status", robot.driveTrain.getDriveMode());
+
+        telemetry.addData("leftRaw", robot.camera.getColorsInfo()[0]);
+
+        telemetry.addData("middleRaw", robot.camera.getColorsInfo()[1]);
+
+        telemetry.addData("rightRaw", robot.camera.getColorsInfo()[2]);
+
+        telemetry.addData("left Percent", robot.camera.getColorsInfo()[3]);
+
+        telemetry.addData("middle Percent", robot.camera.getColorsInfo()[4]);
+
+        telemetry.addData("right Percent", robot.camera.getColorsInfo()[5]);
+        telemetry.addData("Position", robot.camera.getPosition());
+        telemetry.addData("Color Detected", robot.camera.getColorDetected());
+
+
 
 
 
@@ -184,7 +208,6 @@ public class thisisdrivebro extends OpMode
         telemetry.addData("Strafe",strafe );
         telemetry.addData("Forward", forward );
         telemetry.addData("Turn",turn );
-
 
         //telemetry.addData("Robot Position", robot.imu.getPosition());
 

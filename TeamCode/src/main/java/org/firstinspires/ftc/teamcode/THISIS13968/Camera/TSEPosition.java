@@ -3,4 +3,5 @@ public enum TSEPosition {
     LEFT,
   CENTER,
    RIGHT,
+    NOT_FOUND
 }

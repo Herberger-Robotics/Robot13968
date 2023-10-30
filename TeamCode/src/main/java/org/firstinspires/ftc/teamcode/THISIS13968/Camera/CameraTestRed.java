@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.THISIS13968.Camera;//package org.firstins
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -12,14 +13,14 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class CameraTestRed extends LinearOpMode {
 
     OpenCvInternalCamera phoneCam;
-    TSEDetectorPipeline2 pipeline;
+    TSEDetectorPipeline pipeline;
 
     @Override
     public void runOpMode() {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new TSEDetectorPipeline2();
+        pipeline = new TSEDetectorPipeline(Robot13968.DetectColor.BLUE);
         phoneCam.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
@@ -43,7 +44,7 @@ public class CameraTestRed extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            telemetry.addData("Analysis", pipeline.getAnalysis());
+            telemetry.addData("Analysis", pipeline.getObjPosition());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
