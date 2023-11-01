@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-
+/*
 public class Camera {
     public OpenCvCamera controlHubCamera;
     public VisionPortal visionPortal;
@@ -27,25 +27,21 @@ public class Camera {
     public static final double focalLength = 728;  // Replace with the focal length of the camera in pixels
     public TSEDetectorPipeline pipeline;
 //
-    public Camera(final HardwareMap hwMap)
-    {
+    public Camera(final HardwareMap hwMap) {
 
         Robot13968 robot = Robot13968.getInstance();
-
         atagProcessor = new AprilTagProcessor.Builder().build();
-        int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
-
-        controlHubCamera= OpenCvCameraFactory.getInstance().createWebcam(
-                hwMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
-        pipeline = new TSEDetectorPipeline(robot.detectColor );
-        controlHubCamera.setPipeline(pipeline);
+        pipeline = new TSEDetectorPipeline(robot.detectColor);
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(hwMap.get(WebcamName.class, "camera")) // the camera on your robot is named "Webcam 1" by default
+                .addProcessors(atagProcessor, pipeline)
+                .build();
 //
 //        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
 //        // out when the RC activity is in portrait. We do our actual image processing assuming
 //        // landscape orientation, though.
-        controlHubCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-       {
-            @Override
+    }
+           /* @Override
             public void onOpened()
             {
 
@@ -56,9 +52,9 @@ public class Camera {
 
             @Override
             public void onError(int errorCode) {
-            }
-        });
-    }
+            }*/
+
+/*
     public TSEPosition getPosition() {
         return pipeline.getObjPosition();
     }
@@ -86,4 +82,4 @@ public class Camera {
     }
 
 
-}
+}*/

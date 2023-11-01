@@ -41,7 +41,6 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.THISIS13968.Camera.Camera;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor101;
 import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants;
@@ -90,6 +89,7 @@ public class DriveTrain90 extends MecanumDrive {
         robot.leftBack = hwMap.get(DcMotorEx.class, "leftBack");
         robot.rightBack = hwMap.get(DcMotorEx.class, "rightBack");
         robot.rightFront = hwMap.get(DcMotorEx.class, "rightFront");
+      //  robot.arm1 =  hwMap.get(DcMotorEx.class, "arm1");
         follower = new HolonomicPIDVAFollower(DriveTrain90Constants.TRANSLATIONAL_PID, DriveTrain90Constants.TRANSLATIONAL_PID, DriveTrain90Constants.HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 

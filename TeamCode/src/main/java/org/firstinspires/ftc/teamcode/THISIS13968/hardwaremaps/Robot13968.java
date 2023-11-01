@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.THISIS13968.Camera.Camera;
 import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain90;
 import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants;
 
@@ -27,15 +25,14 @@ import java.util.List;
         private ElapsedTime period = new ElapsedTime(); //new  time tracking variable, for auto
 
         public IMU imu; //declare imu
-        //public Camera camera = null;
 
         //drivetrain
         public DcMotorEx rightFront = null;
         public DcMotorEx leftFront = null;
         public DcMotorEx rightBack = null;
         public DcMotorEx leftBack = null;
+        //public DcMotorEx arm1  = null;
         public DriveTrain90 driveTrain = null;
-        public Camera camera;
         public DetectColor detectColor = DetectColor.BLUE; //default
         public enum DetectColor {
             BLUE,
@@ -47,7 +44,7 @@ import java.util.List;
 
             detectColor = color;
         }
-        public DetectColor getDetectColor(DetectColor color){
+        public DetectColor getDetectColor(){
 
             return detectColor;
         }
@@ -83,7 +80,7 @@ import java.util.List;
             module.clearBulkCache();
         }
     }
-        public void init(HardwareMap ahwMap,boolean initIMU, boolean initCamera)
+        public void init(HardwareMap ahwMap,boolean initIMU)
         {
 
             /*
@@ -92,7 +89,6 @@ import java.util.List;
             */
         CommandScheduler.getInstance().reset(); //reset command scheduler
             hwMap = ahwMap;
-            //camera = new Camera(hwMap);
             driveTrain = new DriveTrain90(hwMap); //init drive train
                 //????
             List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
@@ -107,9 +103,6 @@ import java.util.List;
                         DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
                 imu.initialize(parameters);
             }
-            if(initCamera) {
 
-                  camera = new Camera(hwMap);
-            }
         }
 }

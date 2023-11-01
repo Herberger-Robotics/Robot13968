@@ -9,6 +9,7 @@ import android.text.TextPaint;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -40,19 +41,32 @@ public class TeamPropDetectPipeline implements VisionProcessor {
     /**
      * Uses HSVs for the scalars
      *
-     * @param lower   the lower masked bound, a three a value scalar in the form of a HSV
-     * @param upper   the upper masked bound, a three a value scalar in the form of a HSV
+     * @param detectColor   the color to be detected
      * @param minArea the minimum area for a detected blob to be considered the prop
      * @param left    the dividing point for the prop to be on the left
      * @param right   the diving point for the prop to be on the right
      */
-    public TeamPropDetectPipeline(@NonNull Scalar lower, @NonNull Scalar upper, DoubleSupplier minArea, DoubleSupplier left, DoubleSupplier right) {
+    public TeamPropDetectPipeline(Robot13968.DetectColor detectColor, DoubleSupplier minArea, DoubleSupplier left, DoubleSupplier right) {
         this.contours = new ArrayList<>();
-        this.lower = lower;
-        this.upper = upper;
+
         this.minArea = minArea;
         this.left = left;
         this.right = right;
+        Scalar blueLower = new Scalar(97,100,100);
+        Scalar blueUpper = new Scalar(125,255,255);
+        // values are for red
+        // very consistent
+        Scalar lowerRed = new Scalar(150, 100, 100);
+        Scalar redUpper = new Scalar(180, 255, 255);
+
+        if (detectColor == Robot13968.DetectColor.RED){
+            this.lower = lowerRed;
+            this.upper = redUpper;
+        }
+        else if (detectColor == Robot13968.DetectColor.BLUE){
+            this.lower = blueLower;
+            this.upper = blueUpper;
+        }
 
         // setting up the paint for the text in the center of the box
         textPaint = new TextPaint();

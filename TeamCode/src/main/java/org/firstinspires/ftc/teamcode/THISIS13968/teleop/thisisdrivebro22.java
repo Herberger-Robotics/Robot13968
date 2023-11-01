@@ -29,9 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-import static java.lang.Thread.sleep;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -42,18 +39,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TSEDetectorPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.util.List;
+@TeleOp(name="thisisdrive22", group="Iterative Opmode")
 
-@TeleOp(name="thisisdrivebro", group="Iterative Opmode")
-
-public class thisisdrivebro extends OpMode
+public class thisisdrivebro22 extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -67,6 +57,8 @@ public class thisisdrivebro extends OpMode
 
     boolean aButtonHeld = false;
     boolean triggerHeld = false;
+
+
 
     //self explanatory
 
@@ -85,10 +77,10 @@ public class thisisdrivebro extends OpMode
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        robot.setDetectColor(Robot13968.DetectColor.BLUE);
         //Gamepad Initialization
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
-
 
         // Tell the driver that initialization is complete.
         //telemetry.addData("Calibration Status", robot.imu.getSystemStatus());
@@ -154,12 +146,18 @@ public class thisisdrivebro extends OpMode
 
         if (isB) {
             //if B is clicked, close claw
+           // robot.arm1.setPower(0.3);
             telemetry.addData("B",true);
         }
-        if (isA) {
+        else if (isA) {
             //if A is clicked, open claw
-            telemetry.addData("A",false);
+          //  robot.arm1.setPower(-0.3);
+
+            telemetry.addData("A",true);
         }
+        else{}
+           // robot.arm1.setPower(0);}
+
 
         /*
         Sets a gradient slow down function for the bot's driving: the more right trigger is pressed,
@@ -212,7 +210,6 @@ public class thisisdrivebro extends OpMode
 
         //resets vals to 0, initial position
         Robot13968 robot = Robot13968.getInstance();
-
        // robot.imu.stopAccelerationIntegration();
         robot.rightBack.setPower(0);
         robot.leftBack.setPower(0);

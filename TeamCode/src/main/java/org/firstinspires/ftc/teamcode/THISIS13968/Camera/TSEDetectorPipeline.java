@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.Camera;//package org.firstinspires.ftc.teamcode.THISIS10111.Camera;
 
+import android.graphics.Canvas;
+
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -7,33 +9,24 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.vision.VisionProcessor;
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class TSEDetectorPipeline extends OpenCvPipeline {
+public class TSEDetectorPipeline implements VisionProcessor {
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
-    static final Scalar RED_LOW =new Scalar(150, 100, 100);
+    static final Scalar RED_LOW =  new Scalar(150, 100, 100);
     static final Scalar RED_HIGH = new Scalar(180, 255, 255);
 
 
-
-    // values are for blue
-    // not consistent at all.
-    //Scalar lower = new Scalar(97,100,100);
-    //Scalar upper = new Scalar(125,255,255);
-
-    // values are for red
-    // very consistent
-    //Scalar lower = new Scalar(150, 100, 100);
-    //Scalar upper = new Scalar(180, 255, 255);
 
     private Colors colorDetected = Colors.NOT_FOUND;
     public enum Colors{
         BLUE,
 
-        PURPLE,
-        WHITE,
-        GREEN,
         RED,
         NOT_FOUND
     }
@@ -63,26 +56,34 @@ public class TSEDetectorPipeline extends OpenCvPipeline {
         detectColor = color;
        // telemetry = t;
     }
+    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+        // this method draws the rectangle around the largest contour and puts the current prop position into that rectangle
+        // you don't need to call it
 
-    @Override
-    public void init(Mat firstFrame) {
+//		for (MatOfPoint contour : contours) {
+//			Rect rect = Imgproc.boundingRect(contour);
+//			canvas.drawLines(new float[]{rect.x * scaleBmpPxToCanvasPx, rect.y * scaleBmpPxToCanvasPx, (rect.x + rect.width) * scaleBmpPxToCanvasPx, (rect.y + rect.height) * scaleBmpPxToCanvasPx}, textPaint);
+//		}
     }
-
+        @Override
+    public void init(int width, int height, CameraCalibration calibration) {
+        // this method comes with all VisionProcessors, we just don't need to do anything here, and you don't need to call it
+    }
     @Override
-    public Mat processFrame(Mat input) {
+    public Mat processFrame(Mat input, long  time) {
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
         Mat left= mat.submat(LEFT_RECT);
         Mat middle= mat.submat(MIDDLE_RECT);
         Mat right= mat.submat(RIGHT_RECT);
 
-        if (detectColor == Robot13968.DetectColor.RED){
-            Core.inRange(mat, RED_LOW, RED_HIGH, mat);
+        if (detectColor == Robot13968.DetectColor.BLUE){
             colorDetected = Colors.BLUE;
         }
-        else if (detectColor == Robot13968.DetectColor.BLUE){
+        else if (detectColor == Robot13968.DetectColor.RED){
             //Core.inRange(mat, BlUE_LOW, BLUE_HIGH, mat);
             //double leftValue = Core.sumElems(left).val[0]/LEFT_RECT.area()/255;
 
+            Core.inRange(mat, RED_LOW, RED_HIGH, mat);
             colorDetected = Colors.RED;
 
         }
