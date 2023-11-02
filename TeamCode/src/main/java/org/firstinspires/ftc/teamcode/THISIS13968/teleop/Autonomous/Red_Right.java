@@ -18,7 +18,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @Config
-@Autonomous(name="Camera Testing", group="Autonomous")
+@Autonomous(name="Red Right", group="Autonomous")
 public class Red_Right extends OpMode {
     Robot13968 robot;
 
@@ -29,6 +29,7 @@ public class Red_Right extends OpMode {
     @Override
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
+
 
         robot.init(hardwareMap, true); //initializes robot for driving with imu
 

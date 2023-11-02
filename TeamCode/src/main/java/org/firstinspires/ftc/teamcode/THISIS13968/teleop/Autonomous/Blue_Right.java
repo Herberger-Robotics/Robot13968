@@ -21,7 +21,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @Config
-@Autonomous(name="Camera Testing", group="Autonomous")
+@Autonomous(name="Blue Right", group="Autonomous")
 public class Blue_Right extends OpMode {
     Robot13968 robot;
 

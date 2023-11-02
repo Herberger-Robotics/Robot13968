@@ -28,11 +28,11 @@ public class TrajectoryTesting extends LinearOpMode {
         waitForStart();
         if(isStopRequested()) return;
 
-       /* Trajectory myTraj  = robot.driveTrain.trajectoryBuilder(new Pose2d())
-                .forward(10) //clearly NOT measured in inches
-                .build();*/
-        Pose2d startPose = new Pose2d(-33.89, 63.75, Math.toRadians(270.00));
-        TrajectorySequence left =  robot.driveTrain.trajectorySequenceBuilder(startPose)
+
+        //position for starting on the right side, check if correct on dashboard
+        Pose2d rightStartPose = new Pose2d(-33.89, 63.75, Math.toRadians(270.00));
+        //runs traj for case in which team prop is on left
+        TrajectorySequence left =  robot.driveTrain.trajectorySequenceBuilder(rightStartPose)
                 .splineTo(new Vector2d(-28.89, 38.0), Math.toRadians(-45))
                 .setReversed(true)
                 .splineTo( new Vector2d(-27.0, 58.5), Math.toRadians(0.0))

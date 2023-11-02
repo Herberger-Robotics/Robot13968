@@ -37,6 +37,12 @@ public class TeamPropDetectPipeline implements VisionProcessor {
     private MatOfPoint largestContour;
     private PropPositions previousPropPosition;
     private PropPositions recordedPropPosition = PropPositions.UNFOUND;
+    //can delete the tune colors after
+    public Scalar blueLower;
+    public Scalar blueUpper;
+    public Scalar redLower;
+    public Scalar redUpper;
+
 
     /**
      * Uses HSVs for the scalars
@@ -52,15 +58,21 @@ public class TeamPropDetectPipeline implements VisionProcessor {
         this.minArea = minArea;
         this.left = left;
         this.right = right;
+
+       /* these apparently worked, but are actually closer to green??
+
         Scalar blueLower = new Scalar(97,100,100);
+
         Scalar blueUpper = new Scalar(125,255,255);
-        // values are for red
-        // very consistent
-        Scalar lowerRed = new Scalar(150, 100, 100);
-        Scalar redUpper = new Scalar(180, 255, 255);
+         */
+
+        blueLower = new Scalar(0,0,0);
+        blueUpper= new Scalar(360,255,255);
+        redLower= new Scalar(0,0,0);
+        redUpper= new Scalar(360,255,255);
 
         if (detectColor == Robot13968.DetectColor.RED){
-            this.lower = lowerRed;
+            this.lower = redLower;
             this.upper = redUpper;
         }
         else if (detectColor == Robot13968.DetectColor.BLUE){
@@ -248,5 +260,13 @@ public class TeamPropDetectPipeline implements VisionProcessor {
         MIDDLE,
         RIGHT,
         UNFOUND
+    }
+
+    //allows changes to bounds from auto camera testing
+    public void setBoundsTuning(Scalar lowRed, Scalar highRed, Scalar lowBlue, Scalar highBlue){
+        blueLower = lowBlue;
+        blueUpper = highBlue;
+        redLower = lowRed ;
+        redUpper = highRed;
     }
 }

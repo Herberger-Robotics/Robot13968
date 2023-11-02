@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop.Autonomous;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TSEDetectorPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
@@ -25,22 +28,30 @@ public class CameraTest extends OpMode {
     private VisionPortal visionPortal;
     private TeamPropDetectPipeline propDetect;
     private AprilTagProcessor atagProcessor;
+
+    //trying to be able to edit these in ftc dashboard, just changes the lower and upper bounds of color detect
+    //can delete these 4 after tuning and finalize them in pipeline
+    //should now be able to edit these in telemetry/dashboard
+    public static Scalar LOWER_RED = new Scalar(-15, 100, 100);
+
+    public static Scalar UPPER_RED =  new Scalar(15, 255, 255);
+    public static Scalar LOWER_BLUE = new Scalar(220,100,100);
+
+    public static Scalar UPPER_BLUE=  new Scalar(250,255,255);
     @Override
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
 
-        robot.init(hardwareMap, true); //initializes robot for manual driving with imu
+        robot.init(hardwareMap, true); //initializes robot with imu
 
-        //Gamepad Initialization
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        // Tell the driver that initialization is complete.]
-        telemetry.addData("Status", "Initialized");
         robot.setDetectColor(Robot13968.DetectColor.RED);
         telemetry.addData("Color Detection Mode", robot.getDetectColor());
 
 
         double minArea = 200; // the minimum area for the detection to consider for your prop
-       // controller = new PIDController(p,i,d);
+
         atagProcessor = new AprilTagProcessor.Builder().build();
         propDetect = new TeamPropDetectPipeline(
             robot.getDetectColor(),
@@ -49,13 +60,22 @@ public class CameraTest extends OpMode {
                 () -> 426 // the left dividing line, in this case the right third of the frame
 
         );
-                //new TSEDetectorPipeline(Robot13968.DetectColor.RED);
+        propDetect.setBoundsTuning(LOWER_RED,UPPER_RED,LOWER_BLUE, UPPER_BLUE);
 
+        //just to make sure the setBoundsTuning function works, delete once tested
+        telemetry.addData("Red Lower", propDetect.redLower);
+        telemetry.addData("Red Upper", propDetect.redUpper);
+        telemetry.addData("Blue Lower", propDetect.blueLower);
+        telemetry.addData("Blue Upper", propDetect.blueUpper);
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "camera")) // the camera on your robot is named "Webcam 1" by default
                 .addProcessors(atagProcessor, propDetect)
                 .build();
+
+
+        // Tell the driver that initialization is complete.]
+        telemetry.addData("Status", "Initialized");
 
     }
 
