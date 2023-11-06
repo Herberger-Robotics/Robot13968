@@ -17,13 +17,13 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants;
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.SequenceSegment;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.TurnSegment;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.WaitSegment;
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
-import org.firstinspires.ftc.teamcode.util.LogFiles;
+import org.firstinspires.ftc.teamcode.trajectorysequence.util.DashboardUtil;
+import org.firstinspires.ftc.teamcode.trajectorysequence.util.LogFiles;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -203,7 +203,7 @@ public class TrajectorySequenceRunner {
 
         final double NOMINAL_VOLTAGE = 12.0;
         double voltage = voltageSensor.getVoltage();
-        if (driveSignal != null && !DriveConstants.RUN_USING_ENCODER) {
+        if (driveSignal != null && !DriveConstants101.RUN_USING_ENCODER) {
             driveSignal = new DriveSignal(
                     driveSignal.getVel().times(NOMINAL_VOLTAGE / voltage),
                     driveSignal.getAccel().times(NOMINAL_VOLTAGE / voltage)

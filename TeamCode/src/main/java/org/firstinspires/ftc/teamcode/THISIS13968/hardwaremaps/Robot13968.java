@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.DriveTrain90;
-import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants;
+import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.SampleMecanumDrive;
 
 import java.util.List;
 
@@ -26,13 +24,9 @@ import java.util.List;
 
         public IMU imu; //declare imu
 
-        //drivetrain
-        public DcMotorEx rightFront = null;
-        public DcMotorEx leftFront = null;
-        public DcMotorEx rightBack = null;
-        public DcMotorEx leftBack = null;
+
         //public DcMotorEx arm1  = null;
-        public DriveTrain90 driveTrain = null;
+        public SampleMecanumDrive driveTrain = null;
         public DetectColor detectColor = DetectColor.BLUE; //default
         public enum DetectColor {
             BLUE,
@@ -80,16 +74,16 @@ import java.util.List;
             module.clearBulkCache();
         }
     }
-        public void init(HardwareMap ahwMap,boolean initIMU)
+        public void init(HardwareMap ahwMap)
         {
 
             /*
-            initiallizes robot with hardware map, drive mode,
+            initializes robot with hardware map, drive mode,
             and whether or not there is an IMU; expansion hub has built in imu
             */
         CommandScheduler.getInstance().reset(); //reset command scheduler
             hwMap = ahwMap;
-            driveTrain = new DriveTrain90(hwMap); //init drive train
+            driveTrain = new SampleMecanumDrive(hwMap); //init drive train
                 //????
             List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
 
@@ -97,12 +91,7 @@ import java.util.List;
                 module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
             }
 
-            if(initIMU) {
-                imu = hwMap.get(IMU.class, "imu");
-                IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                        DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-                imu.initialize(parameters);
-            }
+
 
         }
 }

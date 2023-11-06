@@ -31,7 +31,7 @@ public class Red_Right extends OpMode {
         robot = Robot13968.resetInstance(); //resets bot
 
 
-        robot.init(hardwareMap, true); //initializes robot for driving with imu
+        robot.init(hardwareMap); //initializes robot for driving with imu
 
         robot.setDetectColor(Robot13968.DetectColor.RED);
 

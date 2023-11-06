@@ -73,7 +73,7 @@ public class thisisdrivebro22 extends OpMode
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
 
-        robot.init(hardwareMap, true); //initializes robot for manual driving with imu
+        robot.init(hardwareMap); //initializes robot for manual driving with imu
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
@@ -120,8 +120,6 @@ public class thisisdrivebro22 extends OpMode
         driveTrainController(); //just the driving function below
 
         //telemetry sends info to driver station phone, just for testing purposes
-        telemetry.addData("Speed", robot.leftBack.getPower());
-        //telemetry.addData("Status", robot.driveTrain.getDriveMode());
 
 
 
@@ -211,10 +209,7 @@ public class thisisdrivebro22 extends OpMode
         //resets vals to 0, initial position
         Robot13968 robot = Robot13968.getInstance();
        // robot.imu.stopAccelerationIntegration();
-        robot.rightBack.setPower(0);
-        robot.leftBack.setPower(0);
-        robot.rightFront.setPower(0);
-        robot.leftFront.setPower(0);
+robot.driveTrain.setMotorPowers(0,0,0,0);
     }
 
 

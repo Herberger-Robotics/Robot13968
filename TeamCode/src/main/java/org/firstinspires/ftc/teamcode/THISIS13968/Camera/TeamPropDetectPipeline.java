@@ -59,17 +59,11 @@ public class TeamPropDetectPipeline implements VisionProcessor {
         this.left = left;
         this.right = right;
 
-       /* these apparently worked, but are actually closer to green??
 
-        Scalar blueLower = new Scalar(97,100,100);
-
-        Scalar blueUpper = new Scalar(125,255,255);
-         */
-
-        blueLower = new Scalar(0,0,0);
-        blueUpper= new Scalar(360,255,255);
-        redLower= new Scalar(0,0,0);
-        redUpper= new Scalar(360,255,255);
+        blueLower =  new Scalar(97,100,100);
+         blueUpper = new Scalar(125,255,255);
+        redLower= new Scalar(0,100,100);
+        redUpper= new Scalar(15,255,255);
 
         if (detectColor == Robot13968.DetectColor.RED){
             this.lower = redLower;
@@ -262,11 +256,5 @@ public class TeamPropDetectPipeline implements VisionProcessor {
         UNFOUND
     }
 
-    //allows changes to bounds from auto camera testing
-    public void setBoundsTuning(Scalar lowRed, Scalar highRed, Scalar lowBlue, Scalar highBlue){
-        blueLower = lowBlue;
-        blueUpper = highBlue;
-        redLower = lowRed ;
-        redUpper = highRed;
-    }
+
 }

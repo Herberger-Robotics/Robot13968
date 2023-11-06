@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static java.lang.Thread.sleep;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -42,19 +41,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TSEDetectorPipeline;
+import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.List;
 
 @TeleOp(name="thisisdrivebro", group="Iterative Opmode")
 
-public class thisisdrivebro extends OpMode
-{
+public class thisisdrivebro extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Robot13968 robot;
@@ -69,9 +63,16 @@ public class thisisdrivebro extends OpMode
     boolean triggerHeld = false;
 
     //self explanatory
-
+    private VisionPortal visionPortal;
+    private TeamPropDetectPipeline propDetect;
+    private AprilTagProcessor atagProcessor;
 
     double armup = 0; //initializes amount the arm goes up manually to 0
+    public static int REDLOW = 0;
+    public static int REDHIGH = 20;
+    public static int REDLOW_NEW = 0;
+    public static int REDHIGH_NEW = 20;
+    private double minArea = 200;
 
 
     /*
@@ -81,10 +82,11 @@ public class thisisdrivebro extends OpMode
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
 
-        robot.init(hardwareMap, true); //initializes robot for manual driving with imu
+        robot.init(hardwareMap); //initializes robot for manual driving with imu
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
         //Gamepad Initialization
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
@@ -92,7 +94,11 @@ public class thisisdrivebro extends OpMode
 
         // Tell the driver that initialization is complete.
         //telemetry.addData("Calibration Status", robot.imu.getSystemStatus());
+
+        telemetry.addData("REDLOW INIT", REDLOW);
+        telemetry.addData("REDHIGH INIT", REDHIGH);
         telemetry.addData("Status", "Initialized");
+
     }
 
     /*
@@ -100,7 +106,20 @@ public class thisisdrivebro extends OpMode
      */
     @Override
     public void init_loop() {
+
+        boolean isB = driverOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
+        boolean isA = driverOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
+
+        boolean isX = driverOp.getButton(GamepadKeys.Button.X); //if B is pressed on tool gamepad, true, else false
+        boolean isY = driverOp.getButton(GamepadKeys.Button.Y); //if A is pressed on tool gamepad, true, else false
+
+
+
+        //telemetry sends info to driver station phone, just for testing purposes
+
     }
+
+
 
     /*
      * Code to run ONCE when the driver hits PLAY
@@ -108,7 +127,6 @@ public class thisisdrivebro extends OpMode
     @Override
     public void start() {
         runtime.reset(); //resets time elapsed to 0
-       // FtcDashboard.getInstance().startCameraStream(robot.camera.controlHubCamera, 30);
         //robot.imu.startAccelerationIntegration(null, null , 100 );
        // if (robot.driveTrain.getDriveMode() == DriveTrain101.DriveMode.MANUAL)
 
@@ -127,9 +145,6 @@ public class thisisdrivebro extends OpMode
         CommandScheduler.getInstance().run(); //calls subsystem periodic methods
         driveTrainController(); //just the driving function below
 
-        //telemetry sends info to driver station phone, just for testing purposes
-        telemetry.addData("Speed", robot.leftBack.getPower());
-        //telemetry.addData("Status", robot.driveTrain.getDriveMode());
 
 
 
@@ -144,22 +159,16 @@ public class thisisdrivebro extends OpMode
         boolean rightBumperState = driverOp.getButton(GamepadKeys.Button.RIGHT_BUMPER);
 
 
-        boolean isB = toolOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
-        boolean isA = toolOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
+        boolean isB = driverOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
+        boolean isA = driverOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
+
+        boolean isX = driverOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
+        boolean isY =driverOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
 
         double leftTrigger = driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
 
         //decimal amt (0 to 1) that right trigger (in back) of tool op is pressed
         double rightTrigger = driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-
-        if (isB) {
-            //if B is clicked, close claw
-            telemetry.addData("B",true);
-        }
-        if (isA) {
-            //if A is clicked, open claw
-            telemetry.addData("A",false);
-        }
 
         /*
         Sets a gradient slow down function for the bot's driving: the more right trigger is pressed,
@@ -195,13 +204,7 @@ public class thisisdrivebro extends OpMode
                         -turn
                 )
         );
-        telemetry.addData("Strafe",strafe );
-        telemetry.addData("Forward", forward );
-        telemetry.addData("Turn",turn );
 
-        //telemetry.addData("Robot Position", robot.imu.getPosition());
-
-      //  telemetry.addData("Robot Position", robot.imu.getAngularOrientation());
 
     }
     /*
@@ -214,10 +217,7 @@ public class thisisdrivebro extends OpMode
         Robot13968 robot = Robot13968.getInstance();
 
        // robot.imu.stopAccelerationIntegration();
-        robot.rightBack.setPower(0);
-        robot.leftBack.setPower(0);
-        robot.rightFront.setPower(0);
-        robot.leftFront.setPower(0);
+        robot.driveTrain.setMotorPowers(0,0,0,0);
     }
 
 

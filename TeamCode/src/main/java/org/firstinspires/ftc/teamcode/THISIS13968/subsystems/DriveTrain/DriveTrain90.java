@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain;
 
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.kV;
+
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.MAX_ACCEL;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.MAX_ANG_ACCEL;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.MAX_ANG_VEL;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.MAX_VEL;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.MOTOR_VELO_PID;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.RUN_USING_ENCODER;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.TRACK_WIDTH;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.encoderTicksToInches;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.kA;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.kStatic;
+import static  org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101.kV;
 
 import androidx.annotation.NonNull;
 
@@ -42,17 +43,17 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
-import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.motors.CoolMotor101;
-import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants;
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101;
+
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.trajectorysequence.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/*
 public class DriveTrain90 extends MecanumDrive {
     @Config
     public static class DriveTrain90Constants {
@@ -83,13 +84,8 @@ public class DriveTrain90 extends MecanumDrive {
     public DriveTrain90(HardwareMap hwMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, DriveTrain90Constants.LATERAL_MULTIPLIER);
 
-        Robot13968 robot = Robot13968.getInstance();
 
-        robot.leftFront = hwMap.get(DcMotorEx.class, "leftFront");
-        robot.leftBack = hwMap.get(DcMotorEx.class, "leftBack");
-        robot.rightBack = hwMap.get(DcMotorEx.class, "rightBack");
-        robot.rightFront = hwMap.get(DcMotorEx.class, "rightFront");
-      //  robot.arm1 =  hwMap.get(DcMotorEx.class, "arm1");
+        Robot13968 robot = Robot13968.getInstance();
         follower = new HolonomicPIDVAFollower(DriveTrain90Constants.TRANSLATIONAL_PID, DriveTrain90Constants.TRANSLATIONAL_PID, DriveTrain90Constants.HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
@@ -101,10 +97,15 @@ public class DriveTrain90 extends MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        // TODO: adjust the names of the following hardware devices to match your configuration
 
+        robot.leftFront = hwMap.get(DcMotorEx.class, "leftFront");
+        robot.leftBack = hwMap.get(DcMotorEx.class, "leftRear");
+        robot.rightBack = hwMap.get(DcMotorEx.class, "rightRear");
+        robot.rightFront = hwMap.get(DcMotorEx.class, "rightFront");
+      //  robot.arm1 =  hwMap.get(DcMotorEx.class, "arm1");
 
         motors = Arrays.asList(robot.leftFront, robot.leftBack, robot.rightBack, robot.rightFront);
+
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -317,4 +318,4 @@ public class DriveTrain90 extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 }
-
+*/

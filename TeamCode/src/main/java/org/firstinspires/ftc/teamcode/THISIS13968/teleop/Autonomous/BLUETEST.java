@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop.Autonomous;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -8,21 +7,19 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TSEDetectorPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.opencv.core.Scalar;
 
 import java.util.List;
 
 
 
 @Config
-@Autonomous(name="Camera Testing", group="Autonomous")
-public class CameraTest extends OpMode {
+@Autonomous(name="BLUE TEST", group="Autonomous")
+public class BLUETEST extends OpMode {
     Robot13968 robot;
 
     private VisionPortal visionPortal;
@@ -32,17 +29,13 @@ public class CameraTest extends OpMode {
     //trying to be able to edit these in ftc dashboard, just changes the lower and upper bounds of color detect
     //can delete these 4 after tuning and finalize them in pipeline
     //should now be able to edit these in telemetry/dashboard
-    public static Scalar LOWER_RED = new Scalar(-15, 100, 100);
 
-    public static Scalar UPPER_RED =  new Scalar(15, 255, 255);
-    public static Scalar LOWER_BLUE = new Scalar(220,100,100);
 
-    public static Scalar UPPER_BLUE=  new Scalar(250,255,255);
     @Override
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
 
-        robot.init(hardwareMap, true); //initializes robot with imu
+        robot.init(hardwareMap); //initializes robot with imu
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -60,13 +53,6 @@ public class CameraTest extends OpMode {
                 () -> 426 // the left dividing line, in this case the right third of the frame
 
         );
-        propDetect.setBoundsTuning(LOWER_RED,UPPER_RED,LOWER_BLUE, UPPER_BLUE);
-
-        //just to make sure the setBoundsTuning function works, delete once tested
-        telemetry.addData("Red Lower", propDetect.redLower);
-        telemetry.addData("Red Upper", propDetect.redUpper);
-        telemetry.addData("Blue Lower", propDetect.blueLower);
-        telemetry.addData("Blue Upper", propDetect.blueUpper);
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "camera")) // the camera on your robot is named "Webcam 1" by default
