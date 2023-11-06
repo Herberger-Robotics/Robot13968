@@ -4,10 +4,12 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.SampleMecanumDrive;
@@ -19,11 +21,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class TrajectoryTesting extends LinearOpMode {
 
     Robot13968 robot;
-    public static double INIT_X = 0;
-    public static double INIT_Y = 0;
-    public static double HEADING = 0;
+    public static double INIT_X = -33.89;
+    public static double INIT_Y = 63.75;
+    public static double HEADING = 270;
 
-    public static double DISTANCE = 10;
+    public static double DISTANCE_X = 10;
+
+    public static double DISTANCE_Y = 10;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -55,15 +59,18 @@ public class TrajectoryTesting extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
-                .forward(DISTANCE)
+
+        Pose2d rightStart = new Pose2d(INIT_X, INIT_Y, Math.toRadians(HEADING));
+        TrajectorySequence trajectory = drive.trajectorySequenceBuilder(rightStart)
+                .lineTo(new Vector2d(INIT_X+DISTANCE_X,INIT_Y+DISTANCE_Y))
+
                 .build();
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.followTrajectory(trajectory);
+        drive.followTrajectorySequence(trajectory);
 
         Pose2d poseEstimate = drive.getPoseEstimate();
         telemetry.addData("finalX", poseEstimate.getX());
