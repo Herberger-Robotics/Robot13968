@@ -43,6 +43,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.Wheel.Spin;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
@@ -145,7 +146,10 @@ public class thisisdrivebro extends OpMode {
         CommandScheduler.getInstance().run(); //calls subsystem periodic methods
         driveTrainController(); //just the driving function below
 
-
+        toolOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenHeld(new Spin(robot.intaketm,runtime, Spin.Side.BLUE));
+        toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenHeld(new Spin(robot.intaketm,runtime, Spin.Side.RED));
 
 
 
@@ -215,7 +219,7 @@ public class thisisdrivebro extends OpMode {
 
         //resets vals to 0, initial position
         Robot13968 robot = Robot13968.getInstance();
-
+        robot.intaketm.stop();
        // robot.imu.stopAccelerationIntegration();
         robot.driveTrain.setMotorPowers(0,0,0,0);
     }

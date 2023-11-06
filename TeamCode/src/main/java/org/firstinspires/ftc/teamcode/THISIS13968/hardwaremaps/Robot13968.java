@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.Wheel.Intaketm;
 import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.SampleMecanumDrive;
 
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
 
         public IMU imu; //declare imu
 
-
+        public Motor intake = null;
         //public DcMotorEx arm1  = null;
         public SampleMecanumDrive driveTrain = null;
         public DetectColor detectColor = DetectColor.BLUE; //default
@@ -33,7 +35,7 @@ import java.util.List;
             RED
 
         }
-
+        public Intaketm intaketm;
         public void setDetectColor(DetectColor color){
 
             detectColor = color;
