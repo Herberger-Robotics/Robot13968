@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunnertuningfiles;
+package org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain;
 
 import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants.MAX_ANG_ACCEL;
@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.DriveConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
@@ -53,6 +54,7 @@ import java.util.List;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
+ * this is where the motors live, including tool methods
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
@@ -72,8 +74,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private TrajectoryFollower follower;
 
-    private Motor intake;
+    public DcMotorEx intake;
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+
     private List<DcMotorEx> motors;
 
     private IMU imu;
@@ -103,7 +106,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         imu.initialize(parameters);
 
 
-
+        intake = hardwareMap.get(DcMotorEx.class,"intake");
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");

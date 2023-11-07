@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.meta.When;
-
+/*
 public class Spin extends CommandBase {
 
     Intaketm wheel;
@@ -54,4 +54,4 @@ public class Spin extends CommandBase {
         robot.intake.set(0);
     }
 
-}
+*/

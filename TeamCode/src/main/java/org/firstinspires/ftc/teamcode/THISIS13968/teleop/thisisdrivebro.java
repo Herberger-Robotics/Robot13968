@@ -43,7 +43,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
-import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.Wheel.Spin;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
@@ -145,13 +144,13 @@ public class thisisdrivebro extends OpMode {
 
         CommandScheduler.getInstance().run(); //calls subsystem periodic methods
         driveTrainController(); //just the driving function below
-
+/*
         toolOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenHeld(new Spin(robot.intaketm,runtime, Spin.Side.BLUE));
         toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenHeld(new Spin(robot.intaketm,runtime, Spin.Side.RED));
 
-
+*/
 
     }
 
@@ -166,13 +165,16 @@ public class thisisdrivebro extends OpMode {
         boolean isB = driverOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
         boolean isA = driverOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
 
-        boolean isX = driverOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
-        boolean isY =driverOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
+        boolean isX = driverOp.getButton(GamepadKeys.Button.X); //if B is pressed on tool gamepad, true, else false
+        boolean isY =driverOp.getButton(GamepadKeys.Button.Y); //if A is pressed on tool gamepad, true, else false
 
         double leftTrigger = driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
 
         //decimal amt (0 to 1) that right trigger (in back) of tool op is pressed
         double rightTrigger = driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
+
+        double spinForward = toolOp.getLeftY()*1.2;
+        robot.driveTrain.intake.setPower(spinForward);
 
         /*
         Sets a gradient slow down function for the bot's driving: the more right trigger is pressed,
@@ -219,7 +221,7 @@ public class thisisdrivebro extends OpMode {
 
         //resets vals to 0, initial position
         Robot13968 robot = Robot13968.getInstance();
-        robot.intaketm.stop();
+       // robot.intaketm.stop();
        // robot.imu.stopAccelerationIntegration();
         robot.driveTrain.setMotorPowers(0,0,0,0);
     }

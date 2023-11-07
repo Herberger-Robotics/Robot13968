@@ -5,14 +5,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
-import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
@@ -21,8 +19,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class TrajectoryTesting extends LinearOpMode {
 
     Robot13968 robot;
-    public static double INIT_X = -33.89;
-    public static double INIT_Y = 63.75;
+    public static double INIT_X =0 ;//-33.89
+    public static double INIT_Y = 0 ;//63.75
     public static double HEADING = 270;
 
     public static double DISTANCE_X = 10;
@@ -35,7 +33,6 @@ public class TrajectoryTesting extends LinearOpMode {
         robot.init(hardwareMap);
         robot.setDetectColor(Robot13968.DetectColor.RED);
 
-        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         Pose2d rightStartPose = new Pose2d(INIT_X, INIT_Y, Math.toRadians(HEADING));
          rightStartPose = new Pose2d();
         TrajectorySequence left =  robot.driveTrain.trajectorySequenceBuilder(rightStartPose)
@@ -44,14 +41,11 @@ public class TrajectoryTesting extends LinearOpMode {
         waitForStart();
         if(isStopRequested()) return;/*
 
-         */
-
-
-       /* Trajectory myTraj  = robot.driveTrain.trajectoryBuilder(new Pose2d())
+       Trajectory myTraj  = robot.driveTrain.trajectoryBuilder(new Pose2d())
                 .splineTo(new Vector2d(20,20),Math.toRadians(0)) //clearly NOT measured in inches
-                .build();
-*/
-        /*Trajectory myTraj2  = robot.driveTrain.trajectoryBuilder(new Pose2d())
+
+Trajectory myTraj2  = robot.driveTrain.trajectoryBuilder(new Pose2d())
+
             .strafeRight(2)
                 .build();*/
         // robot.driveTrain.followTrajectorySequence(left);

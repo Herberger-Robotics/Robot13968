@@ -1,15 +1,22 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop.Autonomous;
 
 
+import static org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline.PropPositions.MIDDLE;
+import static org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline.PropPositions.UNFOUND;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -25,17 +32,20 @@ public class Red_Right extends OpMode {
     private VisionPortal visionPortal;
     private TeamPropDetectPipeline propDetect;
     private AprilTagProcessor atagProcessor;
+    private double INIT_X = 0;
 
+    private double INIT_Y = 0;
+
+    private double INIT_HEADING = 0;
+    private SampleMecanumDrive drive;
     @Override
     public void init() {
+        //initialization of drivetrain, telemetry, and vision
         robot = Robot13968.resetInstance(); //resets bot
-
-
-        robot.init(hardwareMap); //initializes robot for driving with imu
-
+        robot.init(hardwareMap); //initializes robot
+         drive= new SampleMecanumDrive(hardwareMap); //this is where the motors live
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.setDetectColor(Robot13968.DetectColor.RED);
-
-
         double minArea = 200; // the minimum area for the detection to consider for your prop
         // controller = new PIDController(p,i,d);
         atagProcessor = new AprilTagProcessor.Builder().build();
@@ -46,7 +56,6 @@ public class Red_Right extends OpMode {
                 () -> 426 // the left dividing line, in this case the right third of the frame
 
         );
-
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "camera")) // the camera on your robot is named "Webcam 1" by default
                 .addProcessors(atagProcessor, propDetect)
@@ -54,29 +63,25 @@ public class Red_Right extends OpMode {
 
         // Tell the driver that initialization is complete.]
         telemetry.addData("Status", "Initialized");
-
-
     }
-
     @Override
     public void init_loop() {
-        telemetry.addData("Currently Recorded Position", propDetect.getRecordedPropPosition());
-        telemetry.addData("Currently Detected Mass Center", "x: " + propDetect.getLargestContourX() + ", y: " + propDetect.getLargestContourY());
 
 
     }
     @Override
     public void start() {
 
-
+            // gets prop position
         TeamPropDetectPipeline.PropPositions recordedPropPosition = propDetect.getRecordedPropPosition();
-       //if (recordedPropPosition == UNFOUND) {recordedPropPosition = MIDDLE;}  // a guess
+        if (recordedPropPosition == UNFOUND) {recordedPropPosition = MIDDLE;}  // a guess
 
+        //initial pose, variable based so this can be edited
+        //going to start at startpose 0,0 and only pre-code heading
         Pose2d startPose = new Pose2d(-33.89, 63.75, Math.toRadians(270.00));
+        drive.setPoseEstimate(startPose);
 
-        robot.driveTrain.setPoseEstimate(startPose);
-
-        TrajectorySequence left =  robot.driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence left =  drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-28.89, 38.0), Math.toRadians(-45))
                 .setReversed(true)
                 .splineTo( new Vector2d(-27.0, 58.5), Math.toRadians(0.0))
@@ -85,7 +90,7 @@ public class Red_Right extends OpMode {
                 //  .lineTo(new Vector2d(0,36))
                 .build();
 
-        TrajectorySequence middle = robot.driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence middle = drive.trajectorySequenceBuilder(startPose)
                 .lineTo(new Vector2d(-33.89, 32.0))
                 .setReversed(true)
                 .back(20)
@@ -94,7 +99,7 @@ public class Red_Right extends OpMode {
                 .lineTo(new Vector2d(48,34))
                 .build();
 
-        TrajectorySequence right = robot.driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-42.5, 42.0), Math.toRadians(225.0))
                 .setReversed(true)
                 .splineTo( new Vector2d(-21.0, 58.5), Math.toRadians(0.0))
@@ -115,8 +120,6 @@ public class Red_Right extends OpMode {
             case RIGHT:
                 robot.driveTrain.followTrajectorySequence(right);
                 break;
-            case UNFOUND:
-                telemetry.addLine("Unfound");
         }
 
     }

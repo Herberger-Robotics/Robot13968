@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -25,6 +26,8 @@ public class REDTEST extends OpMode {
     private TeamPropDetectPipeline propDetect;
     private AprilTagProcessor atagProcessor;
 
+    double minArea = 200; // the minimum area for the detection to consider for your prop
+
 
     //trying to be able to edit these in ftc dashboard, just changes the lower and upper bounds of color detect
     //can delete these 4 after tuning and finalize them in pipeline
@@ -34,15 +37,12 @@ public class REDTEST extends OpMode {
     @Override
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
-
         robot.init(hardwareMap); //initializes robot with imu
-
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-
+        SampleMecanumDrive drive= new SampleMecanumDrive(hardwareMap); //this is where the motors live
         robot.setDetectColor(Robot13968.DetectColor.RED);
         telemetry.addData("Color Detection Mode", robot.getDetectColor());
 
-        double minArea = 200; // the minimum area for the detection to consider for your prop
 
         atagProcessor = new AprilTagProcessor.Builder().build();
         propDetect = new TeamPropDetectPipeline(
@@ -52,8 +52,6 @@ public class REDTEST extends OpMode {
                 () -> 426 // the left dividing line, in this case the right third of the frame
 
         );
-
-
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "camera")) // the camera on your robot is named "Webcam 1" by default
                 .addProcessors(atagProcessor, propDetect)

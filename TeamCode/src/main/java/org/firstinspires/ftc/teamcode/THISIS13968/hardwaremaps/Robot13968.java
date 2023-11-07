@@ -7,8 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.Wheel.Intaketm;
-import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.SampleMecanumDrive;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ import java.util.List;
             RED
 
         }
-        public Intaketm intaketm;
+        //public Intaketm intaketm;
         public void setDetectColor(DetectColor color){
 
             detectColor = color;

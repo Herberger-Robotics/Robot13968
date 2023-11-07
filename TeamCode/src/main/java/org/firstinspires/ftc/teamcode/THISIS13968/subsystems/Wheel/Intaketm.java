@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.subsystems.Wheel;
 
 
-
+/*
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
-import org.firstinspires.ftc.teamcode.roadrunnertuningfiles.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.SampleMecanumDrive;
 
 public class Intaketm extends SubsystemBase {
 
@@ -21,7 +21,7 @@ public class Intaketm extends SubsystemBase {
     }
 
     public void run() {
-        robot.intake.set(0.2);
+        robot.intake.set(0.3);
     }
 
     public void stop() {
@@ -29,7 +29,8 @@ public class Intaketm extends SubsystemBase {
     }
 
     public void runInverted() {
-        robot.intake.set(-0.2);
+        robot.intake.set(-0.3);
     }
 
 }
+*/
