@@ -21,11 +21,11 @@ public class TrajectoryTesting extends LinearOpMode {
     Robot13968 robot;
     public static double INIT_X =0 ;//-33.89
     public static double INIT_Y = 0 ;//63.75
-    public static double HEADING = 270;
+    public static double HEADING = 0;
 
-    public static double DISTANCE_X = 10;
+    public static double DISTANCE_X = 20; //for right set 20, for middle set 24, for left set 20
 
-    public static double DISTANCE_Y = 10;
+    public static double DISTANCE_Y = -8;//for right set -8, for middle, set 0, for left set 0
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -54,17 +54,23 @@ Trajectory myTraj2  = robot.driveTrain.trajectoryBuilder(new Pose2d())
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
 
-        Pose2d rightStart = new Pose2d(INIT_X, INIT_Y, Math.toRadians(HEADING));
-        TrajectorySequence trajectory = drive.trajectorySequenceBuilder(rightStart)
-                .lineTo(new Vector2d(INIT_X+DISTANCE_X,INIT_Y+DISTANCE_Y))
-
+        Pose2d rightSide = new Pose2d(INIT_X, INIT_Y, 0);
+        //this trajectory works for middle and right when we are on the right side of the field
+        TrajectorySequence trajectoryMR = drive.trajectorySequenceBuilder(rightSide)
+                .lineTo(new Vector2d(INIT_X +  DISTANCE_X,INIT_Y + DISTANCE_Y)) //the variables are so this can be easily tested through dashboard
+                .build();
+        //this trajectory should work for left, since when we are on the right side field, the straight path is blocked by bars
+        //untested, but should be functional unless turns are being weird
+        TrajectorySequence trajectoryLeft = drive.trajectorySequenceBuilder(rightSide)
+                .lineTo(new Vector2d(INIT_X +  DISTANCE_X,INIT_Y + DISTANCE_Y)) //the variables are so this can be easily tested through dashboard
+                .turn(Math.toRadians(90)) //need to check if turns to the left or not
+                .lineTo(new Vector2d(INIT_X + DISTANCE_X,INIT_Y + DISTANCE_Y+7)) //untested, but should theoretically work
                 .build();
 
         waitForStart();
-
         if (isStopRequested()) return;
 
-        drive.followTrajectorySequence(trajectory);
+        drive.followTrajectorySequence(trajectoryMR); //change based on left or middle/right
 
         Pose2d poseEstimate = drive.getPoseEstimate();
         telemetry.addData("finalX", poseEstimate.getX());

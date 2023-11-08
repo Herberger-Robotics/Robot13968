@@ -10,7 +10,8 @@ import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.SampleMecanumDrive;
 
 public class Intaketm extends SubsystemBase {
-
+       IMPORTANT: These were commented out because we don't need these commands for testing in manual drive
+       Intake uses joystick power as of now, we can use commands if necessary for the auto though
     Robot13968 robot;
 
     public Intaketm(HardwareMap hwMap) {

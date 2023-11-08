@@ -16,7 +16,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
-//NOT UPDATED - COPY CODE FROM RED_RIGHT
+// NOT UPDATED - COPY CODE FROM RED_RIGHT ONCE FINISHED (also not finished, trajectories in testing)
+
 @Config
 @Autonomous(name="Blue Right", group="Autonomous")
 public class Blue_Right extends OpMode {

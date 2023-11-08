@@ -78,9 +78,9 @@ public class Red_Right extends OpMode {
 
         //initial pose, variable based so this can be edited
         //going to start at startpose 0,0 and only pre-code heading
-        Pose2d startPose = new Pose2d(-33.89, 63.75, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(-33.89, 63.75, 0);
         drive.setPoseEstimate(startPose);
-
+            // these trajectories are to be edited and are random, currently all functional/in progress trajectories are in Trajectory Testing
         TrajectorySequence left =  drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-28.89, 38.0), Math.toRadians(-45))
                 .setReversed(true)

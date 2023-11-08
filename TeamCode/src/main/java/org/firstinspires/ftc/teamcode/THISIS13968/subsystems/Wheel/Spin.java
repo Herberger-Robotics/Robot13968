@@ -11,6 +11,8 @@ import javax.annotation.meta.When;
 /*
 public class Spin extends CommandBase {
 
+       IMPORTANT: These were commented out because we don't need these commands for testing in manual drive
+       Intake uses joystick power as of now, we can use commands if necessary for the auto though
     Intaketm wheel;
     ElapsedTime elapsedTime;
     double startTime;
