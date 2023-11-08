@@ -173,7 +173,7 @@ public class thisisdrivebro extends OpMode {
         //decimal amt (0 to 1) that right trigger (in back) of tool op is pressed
         double rightTrigger = driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
 
-        double spinForward = toolOp.getLeftY()*1.2;
+        double spinForward = toolOp.getLeftX()*1.2;
         robot.driveTrain.intake.setPower(spinForward);
 
         /*

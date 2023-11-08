@@ -72,35 +72,22 @@ public class Blue_Right extends OpMode {
         TeamPropDetectPipeline.PropPositions recordedPropPosition = propDetect.getRecordedPropPosition();
        //if (recordedPropPosition == UNFOUND) {recordedPropPosition = MIDDLE;}  // a guess
 
-        Pose2d startPose = new Pose2d(-33.89, 63.75, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(11, 58, Math.toRadians(270.00));
 
         robot.driveTrain.setPoseEstimate(startPose);
 
         TrajectorySequence left =  robot.driveTrain.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-28.89, 38.0), Math.toRadians(-45))
-                .setReversed(true)
-                .splineTo( new Vector2d(-27.0, 58.5), Math.toRadians(0.0))
-                .back(62)
-                .lineTo(new Vector2d(48,34))
-                //  .lineTo(new Vector2d(0,36))
+                .forward(2)
+                .turn(Math.toRadians(30))
                 .build();
 
         TrajectorySequence middle = robot.driveTrain.trajectorySequenceBuilder(startPose)
-                .lineTo(new Vector2d(-33.89, 32.0))
-                .setReversed(true)
-                .back(20)
-                .splineTo( new Vector2d(-21.0, 58.5), Math.toRadians(0.0))
-                .back(60)
-                .lineTo(new Vector2d(48,34))
+                .forward(4)
                 .build();
 
         TrajectorySequence right = robot.driveTrain.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-42.5, 42.0), Math.toRadians(225.0))
-                .setReversed(true)
-                .splineTo( new Vector2d(-21.0, 58.5), Math.toRadians(0.0))
-                .back(60)
-                .lineTo(new Vector2d(48,34))
-                // .lineTo(new Vector2d(0,36))
+                .forward(2)
+                .turn(Math.toRadians(-30))
                 .build();
 
 
