@@ -1,15 +1,19 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop.Autonomous;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
+import org.firstinspires.ftc.teamcode.THISIS13968.subsystems.DriveTrain.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -27,12 +31,13 @@ public class Blue_Right extends OpMode {
     private TeamPropDetectPipeline propDetect;
     private AprilTagProcessor atagProcessor;
     Pose2d startPose;
+    SampleMecanumDrive  drive;
     @Override
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
-
-        robot.init(hardwareMap); //initializes robot for driving with imu
-
+        robot.init(hardwareMap); //initializes robot
+        drive= new SampleMecanumDrive(hardwareMap); //this is where the motors live
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.setDetectColor(Robot13968.DetectColor.BLUE);
 
 
@@ -74,18 +79,18 @@ public class Blue_Right extends OpMode {
 
         Pose2d startPose = new Pose2d(11, 58, Math.toRadians(270.00));
 
-        robot.driveTrain.setPoseEstimate(startPose);
+        drive.setPoseEstimate(startPose);
 
-        TrajectorySequence left =  robot.driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence left =  drive.trajectorySequenceBuilder(startPose)
                 .forward(2)
                 .turn(Math.toRadians(30))
                 .build();
 
-        TrajectorySequence middle = robot.driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence middle = drive.trajectorySequenceBuilder(startPose)
                 .forward(4)
                 .build();
 
-        TrajectorySequence right = robot.driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
                 .forward(2)
                 .turn(Math.toRadians(-30))
                 .build();
@@ -102,8 +107,6 @@ public class Blue_Right extends OpMode {
             case RIGHT:
                 robot.driveTrain.followTrajectorySequence(right);
                 break;
-            case UNFOUND:
-                telemetry.addLine("Unfound");
         }
 
     }
