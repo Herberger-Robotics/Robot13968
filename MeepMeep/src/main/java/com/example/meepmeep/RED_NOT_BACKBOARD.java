@@ -13,9 +13,9 @@ public class RED_NOT_BACKBOARD {
         MeepMeep meepMeep = new MeepMeep(800);
 
         // Declare our first bot
-        double init_x=-37;
-        double init_y=-61;
-        Pose2d startPos = new Pose2d(init_x, init_y, Math.toRadians(90.00));
+        double INIT_X=-37;
+        double INIT_Y=-61;
+        Pose2d startPos = new Pose2d(INIT_X, INIT_Y, Math.toRadians(90.00));
 
         //Red, not backdrop side, center
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -24,7 +24,7 @@ public class RED_NOT_BACKBOARD {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
-                                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(init_x +  00,init_y +28))
+                                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X +  00,INIT_Y +28))
                                 .build()
                 );
 
@@ -35,7 +35,7 @@ public class RED_NOT_BACKBOARD {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
-                                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(init_x - 8,init_y +23)) //the variables are so this can be easily tested through dashboard
+                                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X - 8,INIT_Y +23)) //the variables are so this can be easily tested through dashboard
 
 
                                 .build()
@@ -47,7 +47,7 @@ public class RED_NOT_BACKBOARD {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
-                                .lineToLinearHeading(new Pose2d(init_x+3, init_y+31, Math.toRadians(0)))
+                                .lineToLinearHeading(new Pose2d(INIT_X+3, INIT_Y+31, Math.toRadians(0)))
                                 .build()
                 );
 

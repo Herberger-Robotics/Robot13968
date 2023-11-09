@@ -55,6 +55,7 @@ Trajectory myTraj2  = robot.driveTrain.trajectoryBuilder(new Pose2d())
 
 
         Pose2d rightSide = new Pose2d(INIT_X, INIT_Y, 0);
+        drive.setPoseEstimate(rightSide);
         //this trajectory works for middle and right when we are on the right side of the field
         TrajectorySequence trajectoryMR = drive.trajectorySequenceBuilder(rightSide)
                 .lineTo(new Vector2d(INIT_X +  DISTANCE_X,INIT_Y + DISTANCE_Y)) //the variables are so this can be easily tested through dashboard

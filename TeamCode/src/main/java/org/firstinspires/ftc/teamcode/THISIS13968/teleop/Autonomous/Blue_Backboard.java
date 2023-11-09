@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop.Autonomous;
 
 
+import static org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline.PropPositions.MIDDLE;
+import static org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline.PropPositions.UNFOUND;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -23,8 +25,8 @@ import java.util.List;
 // NOT UPDATED - COPY CODE FROM RED_RIGHT ONCE FINISHED (also not finished, trajectories in testing)
 
 @Config
-@Autonomous(name="Blue Right", group="Autonomous")
-public class Blue_Right extends OpMode {
+@Autonomous(name="Blue Backboard", group="Autonomous")
+public class Blue_Backboard extends OpMode {
     Robot13968 robot;
 
     private VisionPortal visionPortal;
@@ -32,6 +34,10 @@ public class Blue_Right extends OpMode {
     private AprilTagProcessor atagProcessor;
     Pose2d startPose;
     SampleMecanumDrive  drive;
+    double INIT_X = 14;
+    double INIT_Y = 61;
+
+    double INIT_HEADING = 270;
     @Override
     public void init() {
         robot = Robot13968.resetInstance(); //resets bot
@@ -75,37 +81,36 @@ public class Blue_Right extends OpMode {
 
 
         TeamPropDetectPipeline.PropPositions recordedPropPosition = propDetect.getRecordedPropPosition();
-       //if (recordedPropPosition == UNFOUND) {recordedPropPosition = MIDDLE;}  // a guess
+        if (recordedPropPosition == UNFOUND) {recordedPropPosition = MIDDLE;}  // a guess
 
-        Pose2d startPose = new Pose2d(11, 58, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(INIT_X, INIT_Y, Math.toRadians(INIT_HEADING)); // 14,61,  270
 
         drive.setPoseEstimate(startPose);
 
+        //left subject to change
         TrajectorySequence left =  drive.trajectorySequenceBuilder(startPose)
-                .forward(2)
-                .turn(Math.toRadians(30))
+                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X + 7,INIT_Y -23)) //the variables are so this can be easily tested through dashboard
                 .build();
 
         TrajectorySequence middle = drive.trajectorySequenceBuilder(startPose)
-                .forward(4)
+                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X +  00,INIT_Y -28))
                 .build();
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .forward(2)
-                .turn(Math.toRadians(-30))
+                .lineToLinearHeading(new Pose2d(INIT_X-3, INIT_Y-31, Math.toRadians(INIT_HEADING-90)))
                 .build();
 
 
         switch (recordedPropPosition) {
             case LEFT:
-                robot.driveTrain.followTrajectorySequence(left);
+                drive.followTrajectorySequence(left);
                 break;
 
             case MIDDLE:
-                robot.driveTrain.followTrajectorySequence(middle);
+                drive.followTrajectorySequence(middle);
                 break;
             case RIGHT:
-                robot.driveTrain.followTrajectorySequence(right);
+                drive.followTrajectorySequence(right);
                 break;
         }
 

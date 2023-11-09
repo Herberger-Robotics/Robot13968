@@ -25,29 +25,29 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @Config
-@Autonomous(name="Red Right", group="Autonomous")
-public class Red_Right extends OpMode {
+@Autonomous(name="Red- NOT Backboard", group="Autonomous")
+public class Red_NOT_Backboard extends OpMode {
     Robot13968 robot;
 
     private VisionPortal visionPortal;
     private TeamPropDetectPipeline propDetect;
     private AprilTagProcessor atagProcessor;
-    private double INIT_X = 0;
+    private double INIT_X = -37;
 
-    private double INIT_Y = 0;
+    private double INIT_Y = -61;
 
-    private double INIT_HEADING = 0;
+    private double INIT_HEADING = 90;
     private SampleMecanumDrive drive;
     @Override
     public void init() {
         //initialization of drivetrain, telemetry, and vision
         robot = Robot13968.resetInstance(); //resets bot
         robot.init(hardwareMap); //initializes robot
-         drive= new SampleMecanumDrive(hardwareMap); //this is where the motors live
+        drive= new SampleMecanumDrive(hardwareMap); //this is where the motors live
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.setDetectColor(Robot13968.DetectColor.RED);
         double minArea = 200; // the minimum area for the detection to consider for your prop
-        // controller = new PIDController(p,i,d);
+
         atagProcessor = new AprilTagProcessor.Builder().build();
         propDetect = new TeamPropDetectPipeline(
                 robot.getDetectColor(),
@@ -76,49 +76,34 @@ public class Red_Right extends OpMode {
         TeamPropDetectPipeline.PropPositions recordedPropPosition = propDetect.getRecordedPropPosition();
         if (recordedPropPosition == UNFOUND) {recordedPropPosition = MIDDLE;}  // a guess
 
-        //initial pose, variable based so this can be edited
-        //going to start at startpose 0,0 and only pre-code heading
-        Pose2d startPose = new Pose2d(-33.89, 63.75, 0);
+        Pose2d startPose = new Pose2d(INIT_X, INIT_Y, Math.toRadians(INIT_HEADING)); // -37,-61, 90
         drive.setPoseEstimate(startPose);
-            // these trajectories are to be edited and are random, currently all functional/in progress trajectories are in Trajectory Testing
+
+
+        // subject to change
         TrajectorySequence left =  drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-28.89, 38.0), Math.toRadians(-45))
-                .setReversed(true)
-                .splineTo( new Vector2d(-27.0, 58.5), Math.toRadians(0.0))
-                .back(62)
-                .lineTo(new Vector2d(48,34))
-                //  .lineTo(new Vector2d(0,36))
+                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X - 8,INIT_Y +23)) //the variables are so this can be easily tested through dashboard
                 .build();
 
         TrajectorySequence middle = drive.trajectorySequenceBuilder(startPose)
-                .lineTo(new Vector2d(-33.89, 32.0))
-                .setReversed(true)
-                .back(20)
-                .splineTo( new Vector2d(-21.0, 58.5), Math.toRadians(0.0))
-                .back(60)
-                .lineTo(new Vector2d(48,34))
+                .lineTo(new Vector2d(INIT_X +  00,INIT_Y +28))
                 .build();
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-42.5, 42.0), Math.toRadians(225.0))
-                .setReversed(true)
-                .splineTo( new Vector2d(-21.0, 58.5), Math.toRadians(0.0))
-                .back(60)
-                .lineTo(new Vector2d(48,34))
-                // .lineTo(new Vector2d(0,36))
+                .lineToLinearHeading(new Pose2d(INIT_X+3, INIT_Y+31, Math.toRadians(INIT_HEADING-90)))
                 .build();
 
 
         switch (recordedPropPosition) {
             case LEFT:
-                robot.driveTrain.followTrajectorySequence(left);
+                drive.followTrajectorySequence(left);
                 break;
 
             case MIDDLE:
-                robot.driveTrain.followTrajectorySequence(middle);
+                drive.followTrajectorySequence(middle);
                 break;
             case RIGHT:
-                robot.driveTrain.followTrajectorySequence(right);
+                drive.followTrajectorySequence(right);
                 break;
         }
 
