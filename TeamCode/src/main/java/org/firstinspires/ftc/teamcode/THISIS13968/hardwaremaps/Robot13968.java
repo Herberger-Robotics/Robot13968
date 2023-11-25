@@ -25,10 +25,10 @@ import java.util.List;
 
         public IMU imu; //declare imu
 
-        public Motor intake = null;
         //public DcMotorEx arm1  = null;
         public SampleMecanumDrive driveTrain = null;
         public DetectColor detectColor = DetectColor.BLUE; //default
+
         public enum DetectColor {
             BLUE,
             RED
@@ -84,7 +84,7 @@ import java.util.List;
             */
         CommandScheduler.getInstance().reset(); //reset command scheduler
             hwMap = ahwMap;
-            driveTrain = new SampleMecanumDrive(hwMap); //init drive train
+            this.driveTrain = new SampleMecanumDrive(hwMap); //init drive train
                 //????
             List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
 

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
@@ -22,7 +23,12 @@ public class DriveConstants101 {
      * These are motor constants that should be listed online for your motors.
      */
     public static final double TICKS_PER_REV = 537.7;
+
+    public static final double TICKS_PER_DEGREE = TICKS_PER_REV / 180;
+
     public static final double MAX_RPM = 312;
+
+    public static PIDFCoefficients armPID = new PIDFCoefficients(0.056,0,0.001,0.01);
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -74,10 +80,11 @@ public class DriveConstants101 {
     /*
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.
      */
+    //TODO: CHANGE BASED ON NEW ORIENTATION
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
-            RevHubOrientationOnRobot.LogoFacingDirection.UP;
+            RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
-            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+            RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
 
     public static double encoderTicksToInches(double ticks) {

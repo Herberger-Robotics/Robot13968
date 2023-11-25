@@ -18,7 +18,7 @@ public class RED_NOT_BACKBOARD {
         Pose2d startPos = new Pose2d(INIT_X, INIT_Y, Math.toRadians(90.00));
 
         //Red, not backdrop side, center
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity middleBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be blue
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
@@ -29,7 +29,7 @@ public class RED_NOT_BACKBOARD {
                 );
 
         //Red, not backdrop side, left
-        RoadRunnerBotEntity myBot2 = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity leftBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be red
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
@@ -41,7 +41,7 @@ public class RED_NOT_BACKBOARD {
                                 .build()
                 );
         //Red, not backdrop side, right
-        RoadRunnerBotEntity myBot3 = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity rightBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be red
                 .setColorScheme(new ColorSchemeRedLight())
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
@@ -55,10 +55,8 @@ public class RED_NOT_BACKBOARD {
                 .setDarkMode(true)
                 // Background opacity from 0-1
                 .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
+                .addEntity(middleBot)
 
-                .addEntity(myBot2)
-                .addEntity(myBot3)
 
                 .start();
     }

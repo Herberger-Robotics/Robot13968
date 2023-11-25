@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.THISIS13968.subsystems.Wheel;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
@@ -11,21 +12,19 @@ import javax.annotation.meta.When;
 /*
 public class Spin extends CommandBase {
 
-       IMPORTANT: These were commented out because we don't need these commands for testing in manual drive
-       Intake uses joystick power as of now, we can use commands if necessary for the auto though
-    Intaketm wheel;
+    DcMotorEx wheel;
     ElapsedTime elapsedTime;
     double startTime;
 
-    public enum Side {
-        BLUE,
-        RED
+    public enum Direction {
+        OUT,
+        IN
     }
 
-    Side side;
+    Direction side;
 
 
-    public Spin(Intaketm Wheel, ElapsedTime elapsedTime, Side side)  {
+    public Spin(DcMotorEx Wheel, ElapsedTime elapsedTime, Direction side)  {
         this.wheel = Wheel;
         this.elapsedTime = elapsedTime;
         this.side = side;

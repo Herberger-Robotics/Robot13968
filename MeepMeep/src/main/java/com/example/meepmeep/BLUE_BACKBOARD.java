@@ -1,6 +1,7 @@
 package com.example.meepmeep;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark;
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedDark;
@@ -17,36 +18,49 @@ public class BLUE_BACKBOARD {
         Pose2d startPos = new Pose2d(INIT_X, INIT_Y, Math.toRadians(270.00));
 
         //Blue, backdrop side, center
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity leftBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be blue
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
-                                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X +  00,INIT_Y -28))
+                                /*.forward(10)
+                                .strafeLeft(25)
+                                .forward(20)
+                                .turn( -Math.toRadians(90))
+                                .forward(10)*/
+                                .splineTo(new Vector2d(INIT_X+17, INIT_Y-30),Math.toRadians(180))
+                                .lineTo(new Vector2d(INIT_X+35,INIT_Y-20))
+                                .strafeRight(15)
+
+                                //.forward(-20)
                                 .build()
                 );
 
-        //Blue, backdrop side, left
-        RoadRunnerBotEntity myBot2 = new DefaultBotBuilder(meepMeep)
+        //Blue, backdrop side, middle
+        RoadRunnerBotEntity middleBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be blue
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
-                                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X + 7,INIT_Y -23)) //the variables are so this can be easily tested through dashboard
+                                .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X +00,INIT_Y -29))
+                                .forward(-4)
+                                .lineToSplineHeading(new Pose2d(INIT_X +32,INIT_Y -26,Math.toRadians(-180)))
 
-
+                                //   .lineTo(new com.acmerobotics.roadrunner.geometry.Vector2d(INIT_X + 7,INIT_Y -23)) //the variables are so this can be easily tested through dashboard
                                 .build()
                 );
+
         //Blue, backdrop side, right
-        RoadRunnerBotEntity myBot3 = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity rightBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be blue
                 .setColorScheme(new ColorSchemeRedLight())
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
-                                .lineToLinearHeading(new Pose2d(INIT_X-3, INIT_Y-31, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(INIT_X-2, INIT_Y-34, Math.toRadians(180)))
+                                .forward(-34)
                                 .build()
                 );
 
@@ -54,9 +68,7 @@ public class BLUE_BACKBOARD {
                 .setDarkMode(true)
                 // Background opacity from 0-1
                 .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
-                .addEntity(myBot2)
-                .addEntity(myBot3)
+                .addEntity(leftBot)
 
                 .start();
     }

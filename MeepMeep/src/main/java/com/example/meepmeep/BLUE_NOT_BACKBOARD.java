@@ -55,8 +55,6 @@ public class BLUE_NOT_BACKBOARD {
                 // Background opacity from 0-1
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
-                .addEntity(myBot2)
-                .addEntity(myBot3)
 
                 .start();
     }

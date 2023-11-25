@@ -29,24 +29,33 @@
 
 package org.firstinspires.ftc.teamcode.THISIS13968.teleop;
 
+import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.lang.Thread.sleep;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
+import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.DriveConstants101;
 import org.firstinspires.ftc.teamcode.THISIS13968.hardwaremaps.Robot13968;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp(name="thisisdrivebro", group="Iterative Opmode")
+@TeleOp(name="thisisdrive", group="Iterative Opmode")
 
 public class thisisdrivebro extends OpMode {
     // Declare OpMode members.
@@ -62,17 +71,30 @@ public class thisisdrivebro extends OpMode {
     boolean aButtonHeld = false;
     boolean triggerHeld = false;
 
+    double spinForward;
+
     //self explanatory
     private VisionPortal visionPortal;
     private TeamPropDetectPipeline propDetect;
     private AprilTagProcessor atagProcessor;
+    private DcMotorEx armLeft, armRight;
+
+
+    public static PIDController pidfController = new PIDController(0.056,0,0.001);
+
+    double f = 0.01;
+
+    double ticks_in_degrees= DriveConstants101.TICKS_PER_REV/180;
+
+
+    private double armTarget =0;
+
+    //Servo leftClaw, rightClaw, ramp, plane;
 
     double armup = 0; //initializes amount the arm goes up manually to 0
-    public static int REDLOW = 0;
-    public static int REDHIGH = 20;
-    public static int REDLOW_NEW = 0;
-    public static int REDHIGH_NEW = 20;
-    private double minArea = 200;
+
+    double servoTest=0;
+    double initPos;
 
 
     /*
@@ -83,6 +105,17 @@ public class thisisdrivebro extends OpMode {
         robot = Robot13968.resetInstance(); //resets bot
 
         robot.init(hardwareMap); //initializes robot for manual driving with imu
+        this.armLeft = robot.driveTrain.armLeft;
+        this.armRight = robot.driveTrain.armRight;
+      //  plane = hardwareMap.get(Servo.class, "launch");
+
+
+       armRight.setZeroPowerBehavior(BRAKE);
+
+        armLeft.setZeroPowerBehavior(BRAKE);
+
+        armLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+       robot.driveTrain.setZeroPowerBehavior(BRAKE);
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
@@ -95,8 +128,6 @@ public class thisisdrivebro extends OpMode {
         // Tell the driver that initialization is complete.
         //telemetry.addData("Calibration Status", robot.imu.getSystemStatus());
 
-        telemetry.addData("REDLOW INIT", REDLOW);
-        telemetry.addData("REDHIGH INIT", REDHIGH);
         telemetry.addData("Status", "Initialized");
 
     }
@@ -130,7 +161,8 @@ public class thisisdrivebro extends OpMode {
         //robot.imu.startAccelerationIntegration(null, null , 100 );
        // if (robot.driveTrain.getDriveMode() == DriveTrain101.DriveMode.MANUAL)
 
-
+         spinForward=0;
+         //plane.setPosition(1);
         //CommandScheduler.getInstance().schedule(basicDrive);
         //CommandScheduler.getInstance().schedule(manualTurretController);
     }
@@ -141,9 +173,13 @@ public class thisisdrivebro extends OpMode {
      */
     @Override
     public void loop() {
-
         CommandScheduler.getInstance().run(); //calls subsystem periodic methods
         driveTrainController(); //just the driving function below
+
+        //runArm();
+       // ramp.setPosition()
+        telemetry.update();
+
 /*
         toolOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenHeld(new Spin(robot.intaketm,runtime, Spin.Side.BLUE));
@@ -157,37 +193,83 @@ public class thisisdrivebro extends OpMode {
 
     public void driveTrainController() {
 
+        //  intake is driverOp left stick - X based
+        //claws are bumper/trigger on toolOp
+        //arm will be right stick toolOp
 
         boolean leftBumperState = driverOp.getButton(GamepadKeys.Button.LEFT_BUMPER);
         boolean rightBumperState = driverOp.getButton(GamepadKeys.Button.RIGHT_BUMPER);
 
 
-        boolean isB = driverOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
-        boolean isA = driverOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
 
-        boolean isX = driverOp.getButton(GamepadKeys.Button.X); //if B is pressed on tool gamepad, true, else false
-        boolean isY =driverOp.getButton(GamepadKeys.Button.Y); //if A is pressed on tool gamepad, true, else false
+        boolean isdriverB = driverOp.getButton(GamepadKeys.Button.B); //if B is pressed on tool gamepad, true, else false
+        boolean isdriverA = driverOp.getButton(GamepadKeys.Button.A); //if A is pressed on tool gamepad, true, else false
+
+        boolean isdriverX = driverOp.getButton(GamepadKeys.Button.X); //if B is pressed on tool gamepad, true, else false
+        boolean isdriverY =driverOp.getButton(GamepadKeys.Button.Y); //if A is pressed on tool gamepad, true, else false
+
+
+        //figures out whether claws should be open/close
+            boolean isRT;
+            boolean  isLT;
+        boolean isRB = toolOp.getButton(GamepadKeys.Button.RIGHT_BUMPER); //if B is pressed on tool gamepad, true, else false
+        boolean isLB = toolOp.getButton(GamepadKeys.Button.LEFT_BUMPER); //if B is pressed on tool gamepad, true, else false
+
+        if  (toolOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.2){ isRT = TRUE;}
+        else { isRT = FALSE;}
+        if  (toolOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.2){ isLT = TRUE;}
+        else { isLT = FALSE;}
 
         double leftTrigger = driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
 
         //decimal amt (0 to 1) that right trigger (in back) of tool op is pressed
         double rightTrigger = driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
 
-        double spinForward = toolOp.getLeftX()*1.2;
+// spins intake with driver buttons Y and A
+        if (isdriverY){spinForward = 1;}
+            else if (isdriverA){spinForward = -0.7;}
+            else {spinForward = 0;}
         robot.driveTrain.intake.setPower(spinForward);
+
+            //brings up viper slide with toolop using right stick
+        armLeft.setPower(toolOp.getRightY());
+        armRight.setPower(toolOp.getRightY());
+
+        //uses left and right trigger/bumper for open/close of claw
+       /* if (isLT) {leftClaw.setPosition(0);//open
+            }
+
+        if (isLB) {leftClaw.setPosition(0.1);//close
+            }
+
+        if (isRT) {rightClaw.setPosition(0.185);//open
+       }
+
+        if (isRB) {rightClaw.setPosition(0.1);//close
+          }*/
+        boolean upArrTool = toolOp.getButton(GamepadKeys.Button.DPAD_UP);
+        boolean  downArrTool= toolOp.getButton(GamepadKeys.Button.DPAD_DOWN);
+
+      /*  if (upArrTool) {ramp.setPosition(0.65);//up
+        }
+        if (downArrTool){ramp.setPosition(0.55);}
+
+        if (driverOp.getButton(GamepadKeys.Button.DPAD_UP)){plane.setPosition(0);}*/
+
+
+
 
         /*
         Sets a gradient slow down function for the bot's driving: the more right trigger is pressed,
         the slower the speed is
         */
         double speed;
-        if(rightTrigger > 0.9) {speed=0.2;}
-        else if(rightTrigger>0.75) {speed=0.3;}
-        else if(rightTrigger>0.6) {speed=0.4;}
-        else if(rightTrigger>0.45) {speed=0.5;}
-        else if(rightTrigger>0.3) {speed=0.6;}
-        else if(rightTrigger>0.15) {speed=0.7;}
-        else{ speed=0.8;}
+        if(rightTrigger > 0.9) {speed=0.85;}
+        else if(rightTrigger>0.75) {speed=0.80;}
+        else if(rightTrigger>0.6) {speed=0.75;}
+        else if(rightTrigger>0.45) {speed=0.7;}
+        else if(rightTrigger>0.3) {speed=0.65;}
+        else{ speed=0.6;}
 
 
 
@@ -202,6 +284,7 @@ public class thisisdrivebro extends OpMode {
             strafe = driverOp.getLeftX() * (-1) * speed; //sets strafe  to left joystick (driver gamepad) horizontal amt
         }
         else {strafe = 0;}
+        //arm.setPower(0.6*toolOp.getRightY());
 
         robot.driveTrain.setWeightedDrivePower(
                 new Pose2d(
@@ -224,6 +307,14 @@ public class thisisdrivebro extends OpMode {
        // robot.intaketm.stop();
        // robot.imu.stopAccelerationIntegration();
         robot.driveTrain.setMotorPowers(0,0,0,0);
+
+        robot.driveTrain.intake.setPower(0);
+
+        armRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        armRight.setPower(0);
+        armLeft.setPower(0);
     }
 
 
