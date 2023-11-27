@@ -179,7 +179,7 @@ public class Blue_Backboard extends OpMode {
     public void loop(){
 
         telemetryAprilTag();
-        armRightRun();
+        armRun();
 
         propDetect.close();
 
@@ -189,28 +189,15 @@ public class Blue_Backboard extends OpMode {
 
 
     }
-private void armRightRun(){
-    double curr_pos = drive.armRight.getCurrentPosition();
-    double pid = pidfController.calculate(curr_pos,armTarget);
-    double ff = Math.cos(Math.toRadians(armTarget/DriveConstants101.TICKS_PER_REV))*f;
-    double power = pid+ff;
-    drive.armRight.setPower(power);
-    telemetry.addData("current", curr_pos);
-    telemetry.addData("target", curr_pos);
-    telemetry.addData("error", armTarget - drive.armRight.getCurrentPosition());
-    telemetry.update();
-
-
-}
-    private void armLeftRun(){
-        double curr_pos = drive.armLeft.getCurrentPosition();
+    private void armRun(){
+        double curr_pos = drive.arm.getCurrentPosition();
         double pid = pidfController.calculate(curr_pos,armTarget);
         double ff = Math.cos(Math.toRadians(armTarget/DriveConstants101.TICKS_PER_REV))*f;
         double power = pid+ff;
-        drive.armLeft.setPower(power);
+        drive.arm.setPower(power);
         telemetry.addData("current", curr_pos);
         telemetry.addData("target", curr_pos);
-        telemetry.addData("error", armTarget - drive.armLeft.getCurrentPosition());
+        telemetry.addData("error", armTarget - drive.arm.getCurrentPosition());
         telemetry.update();
 
 

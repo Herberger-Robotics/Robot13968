@@ -46,7 +46,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.THISIS13968.Camera.TeamPropDetectPipeline;
@@ -77,7 +76,7 @@ public class thisisdrivebro extends OpMode {
     private VisionPortal visionPortal;
     private TeamPropDetectPipeline propDetect;
     private AprilTagProcessor atagProcessor;
-    private DcMotorEx armLeft, armRight;
+    private DcMotorEx arm;
 
 
     public static PIDController pidfController = new PIDController(0.056,0,0.001);
@@ -105,16 +104,12 @@ public class thisisdrivebro extends OpMode {
         robot = Robot13968.resetInstance(); //resets bot
 
         robot.init(hardwareMap); //initializes robot for manual driving with imu
-        this.armLeft = robot.driveTrain.armLeft;
-        this.armRight = robot.driveTrain.armRight;
+        this.arm = robot.driveTrain.arm;
       //  plane = hardwareMap.get(Servo.class, "launch");
 
 
-       armRight.setZeroPowerBehavior(BRAKE);
+        arm.setZeroPowerBehavior(BRAKE);
 
-        armLeft.setZeroPowerBehavior(BRAKE);
-
-        armLeft.setDirection(DcMotorSimple.Direction.REVERSE);
        robot.driveTrain.setZeroPowerBehavior(BRAKE);
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -226,14 +221,15 @@ public class thisisdrivebro extends OpMode {
         double rightTrigger = driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
 
 // spins intake with driver buttons Y and A
+        /*
         if (isdriverY){spinForward = 1;}
             else if (isdriverA){spinForward = -0.7;}
-            else {spinForward = 0;}
+            else {spinForward = 0;}*/
+        spinForward = toolOp.getLeftY();
         robot.driveTrain.intake.setPower(spinForward);
 
             //brings up viper slide with toolop using right stick
-        armLeft.setPower(toolOp.getRightY());
-        armRight.setPower(toolOp.getRightY());
+        arm.setPower(toolOp.getRightY());
 
         //uses left and right trigger/bumper for open/close of claw
        /* if (isLT) {leftClaw.setPosition(0);//open
@@ -310,11 +306,9 @@ public class thisisdrivebro extends OpMode {
 
         robot.driveTrain.intake.setPower(0);
 
-        armRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        armRight.setPower(0);
-        armLeft.setPower(0);
+        arm.setPower(0);
     }
 
 

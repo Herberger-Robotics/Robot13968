@@ -29,18 +29,14 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.arcrobotics.ftclib.controller.PIDFController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -80,7 +76,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public DcMotorEx intake;
 
-    public DcMotorEx armLeft, armRight;
+    public DcMotorEx arm;
 
 
   //  public DcMotorEx hang;
@@ -119,9 +115,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         //all functions should likely remain within this driveTrain
         intake = hardwareMap.get(DcMotorEx.class,"intake");
 
-        armRight= hardwareMap.get(DcMotorEx.class,"armRight");
 
-        armLeft = hardwareMap.get(DcMotorEx.class,"armLeft");
+        arm = hardwareMap.get(DcMotorEx.class,"arm");
 
 // can comment out if servos unattached
 

@@ -3,18 +3,12 @@ package org.firstinspires.ftc.teamcode.roadrunnertuningfiles.opmode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -44,12 +38,12 @@ public class ArmTesting extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-       DcMotorEx armLeft = drive.armLeft;
+       DcMotorEx arm = drive.arm;
 
-        armLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        armLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       armLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         waitForStart();
@@ -58,15 +52,15 @@ public class ArmTesting extends LinearOpMode {
 
 
 
-        while (Math.abs(armTarget1 - armLeft.getCurrentPosition())>10){
-            double curr_pos = armLeft.getCurrentPosition();
+        while (Math.abs(armTarget1 - arm.getCurrentPosition())>10){
+            double curr_pos = arm.getCurrentPosition();
             double pid = pidfController.calculate(curr_pos,armTarget1);
             double ff = Math.cos(Math.toRadians(armTarget1/ticks_in_degrees))*f;
             double power = pid+ff;
-            armLeft.setPower(power);
+            arm.setPower(power);
             telemetry.addData("current", curr_pos);
             telemetry.addData("target", curr_pos);
-            telemetry.addData("error", armTarget1 - armLeft.getCurrentPosition());
+            telemetry.addData("error", armTarget1 - arm.getCurrentPosition());
             telemetry.update();
 
         }
